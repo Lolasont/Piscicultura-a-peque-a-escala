@@ -60,12 +60,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkActiveSession() {
         if (sessionManager.isSessionValid()) {
-            val firebaseAuth = AuthHelper.getFirebaseAuthOrNull(this)
-            val firebaseUser = firebaseAuth?.currentUser
-            if (firebaseUser != null || firebaseAuth == null) {
-                // Sesión válida dentro del marco de 24h
-                navigateToRoleSelect()
-            }
+            // Sesión válida en almacenamiento cifrado (< 24h).
+            // Permite operación 100% OFFLINE (Bluetooth no requiere Internet una vez autenticado).
+            navigateToRoleSelect()
         }
     }
 
