@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
+    <!-- Paleta inspirada en agua y ambiente acuícola (Tema Oscuro M3) -->
+    <color name="bg_dark">#0D1B2A</color>
+    <color name="card_dark">#1B263B</color>
+    <color name="card_stroke">#415A77</color>
+    <color name="accent_blue">#66C2FF</color>
+    <color name="accent_blue_variant">#3399FF</color>
+    <color name="status_active">#FF6B6B</color>
+    <color name="status_inactive">#7CFC00</color>
+
+    <!-- Colores base para Material 3 -->
+    <color name="md_theme_dark_primary">#66C2FF</color>
+    <color name="md_theme_dark_onPrimary">#003355</color>
+    <color name="md_theme_dark_primaryContainer">#1B263B</color>
+    <color name="md_theme_dark_onPrimaryContainer">#D1E4FF</color>
+    <color name="md_theme_dark_secondary">#778DA9</color>
+    <color name="md_theme_dark_onSecondary">#1B263B</color>
+    <color name="md_theme_dark_background">#0D1B2A</color>
+    <color name="md_theme_dark_onBackground">#E0E1DD</color>
+    <color name="md_theme_dark_surface">#1B263B</color>
+    <color name="md_theme_dark_onSurface">#E0E1DD</color>
+    <color name="md_theme_dark_surfaceVariant">#25354F</color>
+    <color name="md_theme_dark_onSurfaceVariant">#A0AAB5</color>
+    <color name="md_theme_dark_outline">#415A77</color>
+    <color name="md_theme_dark_error">#FF6B6B</color>
+    <color name="md_theme_dark_onError">#330000</color>
+
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
 </resources>

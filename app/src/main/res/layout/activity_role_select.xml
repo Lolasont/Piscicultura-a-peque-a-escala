@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark"
+    android:padding="20dp">
+
+    <!-- Barra superior con bienvenida y logout -->
+    <TextView
+        android:id="@+id/tvWelcomeUser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Operador Conectado"
+        android:textColor="@color/accent_blue"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/btnLogout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSessionType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sesión activa con EncryptedSharedPreferences"
+        android:textColor="@color/md_theme_dark_onSurfaceVariant"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@id/btnLogout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWelcomeUser" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogout"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cerrar"
+        android:textColor="@color/status_active"
+        app:strokeColor="@color/status_active"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSelectRolePrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Selecciona el Rol de este Dispositivo"
+        android:textColor="@color/md_theme_dark_onSurface"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSessionType" />
+
+    <TextView
+        android:id="@+id/tvSelectRoleDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="La misma app corre en ambos teléfonos físicos vinculados por Bluetooth Clásico RFCOMM."
+        android:textColor="@color/md_theme_dark_onSurfaceVariant"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectRolePrompt" />
+
+    <!-- Tarjeta Rol 1: NODO SENSOR -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardNodo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardBackgroundColor="@color/card_dark"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:strokeColor="@color/card_stroke"
+        app:strokeWidth="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectRoleDesc">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1. NODO SENSOR (Simula ESP32)"
+                android:textColor="@color/accent_blue"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="• Sliders de Temperatura (0-40°C) y Turbidez (0-100%)\n• Lógica de aireador (ON si T&lt;18 o &gt;26°C, o Turb&gt;60%)\n• Alimentador cada 15s (pospone si aireador está ON)\n• Servidor Bluetooth RFCOMM (espera conexión)"
+                android:textColor="@color/md_theme_dark_onSurface"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLaunchNodo"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/accent_blue"
+                android:text="Iniciar como NODO SENSOR"
+                android:textColor="@color/md_theme_dark_onPrimary"
+                android:textStyle="bold"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Tarjeta Rol 2: ESTACIÓN DE CONTROL -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardEstacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        app:cardBackgroundColor="@color/card_dark"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:strokeColor="@color/card_stroke"
+        app:strokeWidth="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardNodo">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2. ESTACIÓN DE MONITOREO"
+                android:textColor="@color/accent_blue"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="• Dashboard de telemetría en vivo cada 2s\n• Indicadores visuales de Aireador y Alimentador\n• Contador regresivo de alimentación en tiempo real\n• Cliente Bluetooth RFCOMM y envío de comandos"
+                android:textColor="@color/md_theme_dark_onSurface"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLaunchEstacion"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/accent_blue"
+                android:text="Iniciar como ESTACIÓN"
+                android:textColor="@color/md_theme_dark_onPrimary"
+                android:textStyle="bold"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,42 +2,98 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Bluetooth Permissions for Android 11 and lower -->
-    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="30" />
+    <!-- Permisos de Red para Firebase Authentication -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- Bluetooth Permissions for Android 12+ -->
+    <!-- Permisos Bluetooth para Android 11 o inferior (API <= 30) -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:maxSdkVersion="30" />
+
+    <!-- Permisos Bluetooth para Android 12+ (API >= 31) -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
         android:usesPermissionFlags="neverForLocation"
         tools:targetApi="s" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
 
-    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+    <!-- Requisito de hardware Bluetooth -->
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="true" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplication">
+        android:theme="@style/Theme.Piscicultura"
+        tools:targetApi="31">
+
+        <!-- Actividad Principal / Launcher: Login -->
         <activity
-            android:name=".MainActivity"
+            android:name="cl.inacap.piscicultura.ui.LoginActivity"
             android:exported="true"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MyApplication">
+            android:theme="@style/Theme.Piscicultura">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Registro de usuarios con persistencia cifrada -->
+        <activity
+            android:name="cl.inacap.piscicultura.ui.RegisterActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:label="Registro de Usuario"
+            android:theme="@style/Theme.Piscicultura" />
+
+        <!-- Selector de Rol: Nodo Sensor (ESP32) vs Estación de Control -->
+        <activity
+            android:name="cl.inacap.piscicultura.ui.RoleSelectActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:label="Seleccionar Rol"
+            android:theme="@style/Theme.Piscicultura" />
+
+        <!-- Rol Nodo Sensor (Simulador ESP32 con Servidor Bluetooth) -->
+        <activity
+            android:name="cl.inacap.piscicultura.ui.NodoActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:label="Nodo Sensor (ESP32)"
+            android:theme="@style/Theme.Piscicultura" />
+
+        <!-- Rol Estación de Monitoreo (Cliente Bluetooth y Dashboard) -->
+        <activity
+            android:name="cl.inacap.piscicultura.ui.EstacionActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:label="Estación de Monitoreo"
+            android:theme="@style/Theme.Piscicultura" />
+
+        <!-- Actividad genérica conservada para compatibilidad -->
+        <activity
+            android:name="com.example.MainActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
