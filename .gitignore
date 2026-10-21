@@ -1,18 +1,41 @@
+# Android Studio y Gradle
 *.iml
-.gradle
-.kotlin
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.gradle/
+/build/
+/*/build/
+
+# Archivos de entorno y configuración local sensible
 local.properties
 .env
-debug.keystore
+
+# Directorios de configuración de IntelliJ e IDE
+.idea/
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Salidas compiladas y paquetes binarios
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+
+# Almacén de claves y certificados
+*.keystore
+*.jks
+
+# Logs, capturas y volcados de depuración
+captures/
+*.log
+
+# Caches de sistema operativo
+.DS_Store
+Thumbs.db
+
+# NOTA: google-services.json NO debe ignorarse para permitir la vinculación con Firebase
+!google-services.json
+!app/google-services.json

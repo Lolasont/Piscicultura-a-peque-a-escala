@@ -1,11 +1,11 @@
 package cl.inacap.piscicultura.data.model
 
 /**
- * Entidad de Usuario para autenticación local cifrada
+ * Perfil de Operador autenticado mediante Firebase Authentication.
+ * CERO contraseñas ni hashes almacenados localmente.
  */
 data class User(
-    val username: String,
-    val passwordHash: String,
-    val fullName: String = "",
+    val email: String,
+    val uid: String = "",
     val rol: String = "OPERADOR"
 )
