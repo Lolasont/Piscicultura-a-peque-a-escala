@@ -1,170 +1,296 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_dark"
-    android:padding="20dp">
+    android:fillViewport="true">
 
-    <!-- Barra superior con bienvenida y logout -->
-    <TextView
-        android:id="@+id/tvWelcomeUser"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Operador Conectado"
-        android:textColor="@color/accent_blue"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/btnLogout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="20dp">
 
-    <TextView
-        android:id="@+id/tvSessionType"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Sesión activa con EncryptedSharedPreferences"
-        android:textColor="@color/md_theme_dark_onSurfaceVariant"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@id/btnLogout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvWelcomeUser" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogout"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cerrar"
-        android:textColor="@color/status_active"
-        app:strokeColor="@color/status_active"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvSelectRolePrompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Selecciona el Rol de este Dispositivo"
-        android:textColor="@color/md_theme_dark_onSurface"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSessionType" />
-
-    <TextView
-        android:id="@+id/tvSelectRoleDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="La misma app corre en ambos teléfonos físicos vinculados por Bluetooth Clásico RFCOMM."
-        android:textColor="@color/md_theme_dark_onSurfaceVariant"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSelectRolePrompt" />
-
-    <!-- Tarjeta Rol 1: NODO SENSOR -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardNodo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:cardBackgroundColor="@color/card_dark"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:strokeColor="@color/card_stroke"
-        app:strokeWidth="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSelectRoleDesc">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Barra superior: Información del operador y botón cerrar sesión -->
+        <TextView
+            android:id="@+id/tvWelcomeUser"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:text="Operador: usuario@salmon.cl"
+            android:textColor="@color/accent_blue"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/btnLogout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1. NODO SENSOR (Simula ESP32)"
-                android:textColor="@color/accent_blue"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="• Sliders de Temperatura (0-40°C) y Turbidez (0-100%)\n• Lógica de aireador (ON si T&lt;18 o &gt;26°C, o Turb&gt;60%)\n• Alimentador cada 15s (pospone si aireador está ON)\n• Servidor Bluetooth RFCOMM (espera conexión)"
-                android:textColor="@color/md_theme_dark_onSurface"
-                android:textSize="13sp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnLaunchNodo"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/accent_blue"
-                android:text="Iniciar como NODO SENSOR"
-                android:textColor="@color/md_theme_dark_onPrimary"
-                android:textStyle="bold"
-                app:cornerRadius="10dp" />
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Tarjeta Rol 2: ESTACIÓN DE CONTROL -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardEstacion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        app:cardBackgroundColor="@color/card_dark"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:strokeColor="@color/card_stroke"
-        app:strokeWidth="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardNodo">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvSessionType"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_marginTop="2dp"
+            android:text="Sesión Firebase activa (cifrada con Keystore AES256 - 24h)"
+            android:textColor="@color/md_theme_dark_onSurfaceVariant"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@id/btnLogout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvWelcomeUser" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2. ESTACIÓN DE MONITOREO"
-                android:textColor="@color/accent_blue"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cerrar Sesión"
+            android:textColor="@color/status_active"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/status_active"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="• Dashboard de telemetría en vivo cada 2s\n• Indicadores visuales de Aireador y Alimentador\n• Contador regresivo de alimentación en tiempo real\n• Cliente Bluetooth RFCOMM y envío de comandos"
-                android:textColor="@color/md_theme_dark_onSurface"
-                android:textSize="13sp" />
+        <!-- Tarjeta de Advertencia / Estado de Permisos y Bluetooth (oculta por defecto) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPermissionWarning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="#2A1B1B"
+            app:cardCornerRadius="14dp"
+            app:strokeColor="@color/status_active"
+            app:strokeWidth="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSessionType"
+            tools:visibility="visible">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnLaunchEstacion"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/accent_blue"
-                android:text="Iniciar como ESTACIÓN"
-                android:textColor="@color/md_theme_dark_onPrimary"
-                android:textStyle="bold"
-                app:cornerRadius="10dp" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/tvWarningTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Permisos de Bluetooth Necesarios"
+                    android:textColor="@color/status_active"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvWarningMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Para comunicar el Nodo Sensor y la Estación en tiempo real por Bluetooth RFCOMM, debes conceder los permisos solicitados."
+                    android:textColor="@color/md_theme_dark_onSurface"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRetryPermissions"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/status_active"
+                        android:text="Reintentar Permisos"
+                        android:textColor="@color/white"
+                        app:cornerRadius="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOpenSettings"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:text="Abrir Ajustes"
+                        android:textColor="@color/accent_blue"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="@color/accent_blue" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEnableBluetooth"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Activar Bluetooth del Dispositivo"
+                    android:textColor="@color/accent_blue"
+                    android:visibility="gone"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Título de Sección -->
+        <TextView
+            android:id="@+id/tvSelectRolePrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Selecciona el Rol de este Celular"
+            android:textColor="@color/md_theme_dark_onSurface"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardPermissionWarning" />
+
+        <TextView
+            android:id="@+id/tvSelectRoleDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="La misma app corre en ambos teléfonos físicos vinculados punto a punto por Bluetooth clásico RFCOMM sin necesidad de Internet."
+            android:textColor="@color/md_theme_dark_onSurfaceVariant"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSelectRolePrompt" />
+
+        <!-- Tarjeta Grande 1: NODO SENSOR -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardNodo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/card_dark"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/card_stroke"
+            app:strokeWidth="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSelectRoleDesc">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:contentDescription="Icono Nodo"
+                        android:src="@drawable/circle_status_connected"
+                        app:tint="@color/accent_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="NODO SENSOR (Simula ESP32)"
+                        android:textColor="@color/accent_blue"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="• Sliders de Temperatura (0 a 40 °C) y Turbidez (0 a 100 %)\n• Control automático del aireador (T&lt;18 o &gt;26 °C, o Turb&gt;60 %)\n• Alimentador automático cada 15 s (pospone si aireador está ON)\n• Servidor Bluetooth RFCOMM (BluetoothServerSocket) en UUID SPP fijo\n• Transmite telemetría en JSON cada 2 segundos"
+                    android:textColor="@color/md_theme_dark_onSurface"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLaunchNodo"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="18dp"
+                    android:backgroundTint="@color/accent_blue"
+                    android:text="Ingresar como NODO SENSOR"
+                    android:textColor="@color/md_theme_dark_onPrimary"
+                    android:textStyle="bold"
+                    app:cornerRadius="10dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Tarjeta Grande 2: ESTACIÓN -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardEstacion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/card_dark"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/card_stroke"
+            app:strokeWidth="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardNodo">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:contentDescription="Icono Estación"
+                        android:src="@drawable/circle_status_connected"
+                        app:tint="@color/status_inactive" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="ESTACIÓN DE MONITOREO"
+                        android:textColor="@color/accent_blue"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="• Cliente Bluetooth RFCOMM (BluetoothSocket) conectado al Nodo\n• Dashboard en vivo de Temperatura, Turbidez y estados\n• Contador regresivo sincronizado para próxima alimentación\n• Panel OT de control manual: forzar alimentación y modo de aireador\n• Diagnóstico en vivo de condiciones del estanque salmonícola"
+                    android:textColor="@color/md_theme_dark_onSurface"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLaunchEstacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="18dp"
+                    android:backgroundTint="@color/accent_blue"
+                    android:text="Ingresar como ESTACIÓN"
+                    android:textColor="@color/md_theme_dark_onPrimary"
+                    android:textStyle="bold"
+                    app:cornerRadius="10dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
