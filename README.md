@@ -74,8 +74,7 @@ La interfaz fue diseñada bajo principios de diseño centrado en el usuario (UCD
   * **Azul Informativo:** Banners de espera y estado de sincronización (`bg_banner_info`), reservando los colores de advertencia exclusivamente para situaciones anómalas.
 * **Representación Honesta del Estado Desconectado:**
   Si el panel de control no está conectado al estanque o aún no recibe telemetría, las tarjetas muestran valores neutros (`--.- °C`, `--.- %`, `SIN CONEXIÓN`) en color gris tenue. No se muestran falsos estados verdes, ni modos automáticos, ni cuentas regresivas simuladas. El botón **Desconectar** se visualiza deshabilitado (`alpha = 0.4f`, borde gris neutro) y los botones de control remoto se atenúan (`alpha = 0.5f`) y deshabilitan hasta restablecer el enlace.
-* **Soporte Completo de Tema Claro y Oscuro con Barras del Sistema Adaptativas:**
-  Configuración integral en `values/themes.xml` y `values-night/themes.xml` mediante `android:windowLightStatusBar` y `android:windowLightNavigationBar`, garantizando íconos oscuros sobre fondo claro en modo diurno e íconos claros sobre fondo oscuro en modo nocturno, con total legibilidad y respeto de insets.
+* **Tema Claro y Oscuro Automático:** La aplicación se ajusta automáticamente al modo que tenga configurado el celular (claro u oscuro), sin que el usuario deba cambiar nada dentro de la app.
 
 ---
 
@@ -165,14 +164,13 @@ La interfaz fue diseñada bajo principios de diseño centrado en el usuario (UCD
 
 ## 8. Capturas de Pantalla
 
-Las evidencias visuales del prototipo en funcionamiento se encuentran organizadas en la carpeta `captures/`:
+| Inicio de sesión | Crear cuenta | Selección de rol |
+| :---: | :---: | :---: |
+| **Inicio de sesión**<br>Pantalla de inicio de sesión e ingreso seguro.<br><br><img src="captures/01_login.jpeg" width="250" alt="Inicio de sesión"> | **Crear cuenta**<br>Crear cuenta con requisitos de contraseña visibles.<br><br><img src="captures/02_registro.jpeg" width="250" alt="Crear cuenta (requisitos de contraseña visibles)"> | **Selección de rol**<br>Selección de rol y guía "¿Cómo conectar los dos celulares?".<br><br><img src="captures/03_seleccion_rol.jpeg" width="250" alt="Selección de rol y guía ¿Cómo conectar los dos celulares?"> |
+| **Estanque (sensor)** | **Panel de control** | **Permisos Bluetooth** |
+| **Estanque (sensor)**<br>Estanque (sensor) con controles de temperatura y turbidez.<br><br><img src="captures/04_estanque.jpeg" width="250" alt="Estanque (sensor) con controles de temperatura y turbidez"> | **Panel de control (estación)**<br>Panel de control (estación) sin conexión, con estado neutro y botón Desconectar atenuado.<br><br><img src="captures/05_panel.jpeg" width="250" alt="Panel de control (estación) sin conexión, con estado neutro y botón Desconectar atenuado"> | **Permiso Bluetooth**<br>Solicitud de permiso Bluetooth en tiempo de ejecución.<br><br><img src="captures/06_permisos.jpeg" width="250" alt="Solicitud de permiso Bluetooth en tiempo de ejecución"> |
 
-* `captures/01_login.png`: Pantalla de inicio de sesión e ingreso seguro ("Ingresar", "Crear cuenta") con validaciones amigables.
-* `captures/02_seleccion_rol.png`: Pantalla de selección de rol ("Estanque (sensor)" vs "Panel de control") con saludo "Hola, usuario" y guía paso a paso desplegable.
-* `captures/03_nodo.png`: Pantalla del Estanque (sensor) simulando temperatura y turbidez con sliders interactivos, estado de equipos y botón "Iniciar Estanque".
-* `captures/04_estacion.png`: Dashboard del Panel de control (estación) con semáforo visual, telemetría en tiempo real y controles a distancia ("Dar alimento ahora", modo aireador).
-* `captures/05_permisos.png`: Flujo transparente de solicitud, rationale y manejo tolerante de permisos Bluetooth en Android.
-* `captures/06_modo_claro.png`: Demostración del tema claro con barras del sistema con íconos oscuros nítidos (`windowLightStatusBar`, `windowLightNavigationBar`) y alto contraste.
+> Nota: las capturas fueron tomadas con el celular en modo claro. La aplicación adapta automáticamente su apariencia al modo oscuro cuando el celular lo tiene activado.
 
 ---
 
@@ -195,7 +193,7 @@ A continuación se detallan las 12 pruebas estructuradas para validar todas las 
 | **3** | **Login sin conexión a Internet:** Desactivar Wi-Fi y datos móviles en la pantalla de login. Presionar "Ingresar". | La app no crashea; muestra advertencia *"Sin conexión a Internet. Revisa tu red Wi-Fi o datos móviles para ingresar"* y permanece en la pantalla. |
 | **4** | **Persistencia de sesión cifrada (Offline):** Habiendo iniciado sesión, cerrar la app completamente de la multitarea y volver a abrirla sin Internet. | La app detecta la sesión cifrada válida (< 24 h) en `EncryptedSharedPreferences` y abre directamente la pantalla de selección de rol sin pedir credenciales. |
 | **5** | **Cierre de sesión seguro:** En la pantalla de selección de rol, pulsar el botón "Cerrar sesión". | Se ejecuta `FirebaseAuth.signOut()`, se borra la clave y correo en `EncryptedSharedPreferences`, y redirige a `LoginActivity` limpiando el stack de navegación. |
-| **6** | **Rechazo inicial de permisos Bluetooth:** En la selección de rol, seleccionar un rol y pulsar "Ahora no" o rechazar el permiso en el diálogo. | La app **no se cierra**; permanece abierta y muestra una tarjeta de advertencia amigable con el botón "Dar permiso". |
+| **6** | **Rechazo inicial de permisos Bluetooth:** En la selección de rol, elegir un rol y rechazar el permiso en el diálogo que muestra el sistema Android (su idioma depende del celular) o pulsar "Ahora no". | La app **no se cierra**; permanece abierta y muestra su propia tarjeta de ayuda en español con el botón "Dar permiso" si el usuario rechaza. |
 | **7** | **Rechazo permanente de permisos:** Rechazar permisos marcando "No volver a preguntar". | La tarjeta de advertencia muestra el botón "Abrir ajustes", el cual abre directamente la configuración de permisos de la app en Ajustes de Android. |
 | **8** | **Conexión Bluetooth en vivo entre ambos celulares:** En el Celular 1 (Estanque) pulsar "Iniciar Estanque". En el Celular 2 (Panel) presionar "Seleccionar dispositivo emparejado", elegir Celular 1 y presionar "Conectar". | El Celular 1 pasa a *"Conectado con Panel"*. El Celular 2 pasa a *"Conectado"* (punto verde) y comienza a recibir telemetría cada 2 segundos. |
 | **9** | **Comando de alimentación a distancia:** En el Panel con aireador apagado, presionar "Dar alimento ahora". | El Panel envía `{"type":"CMD","cmd":"FEED"}`. El Estanque activa el alimentador (3 s), envía telemetría de activación y el Panel muestra *"Dispensando alimento..."*. |
