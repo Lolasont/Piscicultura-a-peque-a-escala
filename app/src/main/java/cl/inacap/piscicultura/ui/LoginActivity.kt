@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import cl.inacap.piscicultura.security.AuthHelper
 import cl.inacap.piscicultura.security.EncryptedSessionManager
+import com.example.R
 import com.example.databinding.ActivityLoginBinding
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
@@ -101,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
         if (!AuthHelper.isNetworkAvailable(this)) {
             Toast.makeText(
                 this,
-                "Sin conexión a Internet. Verifique su red móvil o Wi-Fi para iniciar sesión.",
+                getString(R.string.login_error_network),
                 Toast.LENGTH_LONG
             ).show()
             return
@@ -138,7 +139,7 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: FirebaseNetworkException) {
                 Toast.makeText(
                     this@LoginActivity,
-                    "Error de red: No fue posible conectar con los servidores de autenticación.",
+                    getString(R.string.login_error_network),
                     Toast.LENGTH_LONG
                 ).show()
             } catch (e: FirebaseAuthInvalidUserException) {
@@ -150,7 +151,7 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 val errorMsg = e.message.orEmpty().lowercase()
                 if (errorMsg.contains("network") || errorMsg.contains("timeout") || errorMsg.contains("connection")) {
-                    Toast.makeText(this@LoginActivity, "No hay conexión a Internet. Verifique su red.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@LoginActivity, getString(R.string.login_error_network), Toast.LENGTH_LONG).show()
                 } else {
                     showGenericAuthError()
                 }
@@ -163,7 +164,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showGenericAuthError() {
         Toast.makeText(
             this,
-            "Credenciales inválidas o cuenta no registrada. Verifique sus datos.",
+            getString(R.string.login_error_generic),
             Toast.LENGTH_LONG
         ).show()
     }

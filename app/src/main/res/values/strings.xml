@@ -1,3 +1,111 @@
 <resources>
     <string name="app_name">Piscicultura IoT</string>
+
+    <!-- Pantalla Login -->
+    <string name="login_welcome_title">Bienvenido</string>
+    <string name="login_welcome_subtitle">Monitoreo de Piscicultura</string>
+    <string name="login_form_title">Acceso de Operador</string>
+    <string name="login_form_subtitle">Ingresa con tu correo registrado para continuar</string>
+    <string name="login_email_hint">Correo electrónico</string>
+    <string name="login_password_hint">Contraseña</string>
+    <string name="login_password_helper">Mínimo 8 caracteres, con letras y números</string>
+    <string name="login_btn_enter">Ingresar al Sistema</string>
+    <string name="login_btn_go_register">¿No tienes cuenta? Crear una cuenta</string>
+    <string name="login_footer_note">Sesión segura con Firebase. Una vez ingresado, el monitoreo funciona sin necesidad de Internet.</string>
+    <string name="login_error_generic">Correo o contraseña incorrectos. Revisa tus datos e intenta de nuevo.</string>
+    <string name="login_error_network">Sin conexión a Internet. Revisa tu red Wi-Fi o datos móviles para ingresar.</string>
+
+    <!-- Pantalla Registro -->
+    <string name="register_title">Crear Cuenta</string>
+    <string name="register_subtitle">Registro de nuevo operador de piscicultura</string>
+    <string name="register_email_hint">Correo electrónico</string>
+    <string name="register_password_hint">Contraseña nueva</string>
+    <string name="register_confirm_password_hint">Confirmar contraseña</string>
+    <string name="register_btn_submit">Crear Cuenta</string>
+    <string name="register_btn_back">¿Ya tienes cuenta? Inicia sesión aquí</string>
+
+    <!-- Pantalla Selección de Rol -->
+    <string name="role_select_title">¿Qué función cumple este celular?</string>
+    <string name="role_select_subtitle">Elige cómo usarás este dispositivo en el estanque</string>
+    <string name="role_operator_label">Operador:</string>
+    <string name="role_logout_btn">Cerrar sesión</string>
+
+    <string name="role_nodo_title">Estanque (sensor)</string>
+    <string name="role_nodo_desc">Simula el agua del estanque con sensores de temperatura y turbidez, más los actuadores de oxígeno y alimento.</string>
+    <string name="role_nodo_btn">Usar como Estanque</string>
+
+    <string name="role_estacion_title">Panel de control</string>
+    <string name="role_estacion_desc">Muestra en vivo la temperatura y turbidez, avisa si hay problemas y permite controlar los equipos a distancia.</string>
+    <string name="role_estacion_btn">Usar como Panel de control</string>
+
+    <string name="role_help_header">¿Cómo conectar los dos celulares?</string>
+    <string name="role_help_step1">1. Abre esta aplicación en dos celulares con Bluetooth activado.</string>
+    <string name="role_help_step2">2. En uno presiona "Estanque (sensor)" y en el otro "Panel de control".</string>
+    <string name="role_help_step3">3. En el panel, presiona "Conectar" eligiendo el otro celular. ¡Listo!</string>
+
+    <!-- Permisos y Bluetooth -->
+    <string name="permissions_title">Permisos de Bluetooth necesarios</string>
+    <string name="permissions_message">Necesitamos Bluetooth para comunicar los dos celulares directamente, sin cables ni conexión a Internet.</string>
+    <string name="permissions_btn_retry">Dar permiso</string>
+    <string name="permissions_btn_settings">Abrir ajustes</string>
+    <string name="permissions_bluetooth_off_title">Bluetooth desactivado</string>
+    <string name="permissions_bluetooth_off_msg">Enciende el Bluetooth en tu celular para conectar el estanque con el panel de control.</string>
+    <string name="permissions_btn_enable_bt">Activar Bluetooth</string>
+
+    <!-- Pantalla Estanque (Nodo) -->
+    <string name="nodo_chip_header">ESTANQUE · sensor</string>
+    <string name="nodo_connection_waiting">Esperando conexión...</string>
+    <string name="nodo_connection_connected">Conectado con Panel</string>
+    <string name="nodo_connection_stopped">Estanque detenido</string>
+    <string name="nodo_btn_start">Iniciar Estanque</string>
+    <string name="nodo_btn_stop">Detener Estanque</string>
+    <string name="nodo_server_subtext">Listo para recibir al panel</string>
+    <string name="nodo_temp_title">Temperatura del agua</string>
+    <string name="nodo_temp_ideal">Rango ideal para salmones: 18 a 26 °C</string>
+    <string name="nodo_turb_title">Turbidez del agua</string>
+    <string name="nodo_turb_ideal">Rango ideal: menos de 60 % (agua transparente)</string>
+    <string name="nodo_aerator_title">Aireador (oxígeno)</string>
+    <string name="nodo_aerator_on">ENCENDIDO</string>
+    <string name="nodo_aerator_off">APAGADO</string>
+    <string name="nodo_aerator_help">Se activa si el agua se calienta, enfría o enturbia.</string>
+    <string name="nodo_feeder_title">Alimentador de peces</string>
+    <string name="nodo_feeder_help">Dispensa comida cada 15 s solo si el aireador está apagado.</string>
+    <string name="nodo_feeder_dispensing">DISPENSANDO COMIDA</string>
+    <string name="nodo_feeder_postponed">POSPUESTO</string>
+    <string name="nodo_feeder_postponed_help">En espera: el aireador está encendido</string>
+    <string name="nodo_feeder_waiting">EN ESPERA</string>
+    <string name="nodo_btn_force_feed">Dar alimento ahora (prueba local)</string>
+    <string name="nodo_btn_toggle_log">Ver detalles técnicos</string>
+    <string name="nodo_btn_hide_log">Ocultar detalles técnicos</string>
+
+    <!-- Pantalla Panel de control (Estación) -->
+    <string name="estacion_chip_header">PANEL DE CONTROL</string>
+    <string name="estacion_device_prompt">¿Cuál es el celular del estanque?</string>
+    <string name="estacion_device_select_hint">Elige el celular del estanque...</string>
+    <string name="estacion_btn_connect">Conectar</string>
+    <string name="estacion_btn_disconnect">Desconectar</string>
+
+    <string name="estacion_banner_ok_title">Todo en orden</string>
+    <string name="estacion_banner_ok_desc">El agua y los equipos están en condiciones óptimas para los salmones.</string>
+    <string name="estacion_banner_alert_title">Atención requerida</string>
+    <string name="estacion_banner_waiting_title">Esperando conexión...</string>
+    <string name="estacion_banner_waiting_desc">Elige el celular del estanque arriba y presiona \"Conectar\" para comenzar a monitorear.</string>
+
+    <string name="estacion_card_temp_title">Temperatura</string>
+    <string name="estacion_temp_ideal_label">Ideal: 18 a 26 °C</string>
+    <string name="estacion_card_turb_title">Turbidez</string>
+    <string name="estacion_turb_ideal_label">Ideal: menos de 60 %</string>
+    <string name="estacion_card_aerator_title">Aireador</string>
+    <string name="estacion_card_feeder_title">Alimentador</string>
+
+    <string name="estacion_remote_actions_title">Control de equipos a distancia</string>
+    <string name="estacion_btn_feed_now">Dar alimento ahora</string>
+    <string name="estacion_aerator_mode_title">Modo del aireador:</string>
+    <string name="estacion_btn_mode_auto">Automático</string>
+    <string name="estacion_btn_mode_on">Encender</string>
+    <string name="estacion_btn_mode_off">Apagar</string>
+    <string name="estacion_aerator_mode_note">\"Automático\" activa el aireador solo cuando el agua lo requiere (recomendado).</string>
+
+    <string name="estacion_waiting_telemetry">Esperando datos del estanque...</string>
+    <string name="estacion_data_outdated_warning">⚠ Datos desactualizados, revisando conexión...</string>
 </resources>

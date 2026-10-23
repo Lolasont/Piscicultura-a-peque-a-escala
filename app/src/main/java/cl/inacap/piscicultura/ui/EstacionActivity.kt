@@ -19,12 +19,13 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 /**
- * Actividad del ROL ESTACIÓN DE MONITOREO.
- * Muestra el dashboard con 4 tarjetas Material de telemetría en tiempo real:
- * - Temperatura y Turbidez con alertas en color rojo fuera de rango.
- * - Estados de actuadores (Aireador y Alimentador) y contador regresivo sincronizado.
- * - Panel de comandos remotos OT hacia el Nodo Sensor.
- * - Manejo robusto de desconexiones sin crashear mediante Snackbar.
+ * Actividad del ROL PANEL DE CONTROL.
+ * Muestra el dashboard con 4 tarjetas de telemetría en tiempo real:
+ * - Temperatura y Turbidez con alertas visuales claras fuera de rango.
+ * - Banner resumen estilo semáforo (Todo en orden / Atención requerida).
+ * - Estados de equipos (Aireador y Alimentador) y cuenta regresiva sincronizada.
+ * - Panel de control a distancia hacia el Estanque.
+ * - Manejo robusto de desconexiones sin crashear mediante Snackbar amigable.
  * - Todo el I/O en Dispatchers.IO y observación de StateFlow con repeatOnLifecycle.
  */
 class EstacionActivity : AppCompatActivity() {
@@ -47,7 +48,7 @@ class EstacionActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        // Selector de dispositivo emparejado mediante diálogo
+        // Selector de celular del estanque mediante diálogo
         binding.btnSelectDevice.setOnClickListener {
             showDeviceSelectionDialog()
         }
@@ -62,12 +63,12 @@ class EstacionActivity : AppCompatActivity() {
             viewModel.desconectar()
         }
 
-        // Comando OT: Forzar Alimentación Inmediata
+        // Control a distancia: Dar Alimento Ahora
         binding.btnForzarAlimentacion.setOnClickListener {
             viewModel.enviarFeed()
         }
 
-        // Comandos OT: Modo Aireador (Auto, Manual ON, Manual OFF)
+        // Controles de Modo del Aireador (Automático, Encender, Apagar)
         binding.btnAireadorAuto.setOnClickListener {
             viewModel.setAireador("AUTO")
         }
@@ -86,7 +87,7 @@ class EstacionActivity : AppCompatActivity() {
         if (bondedDevices.isEmpty()) {
             Snackbar.make(
                 binding.root,
-                "No hay dispositivos Bluetooth emparejados. Empareja el celular Nodo en Ajustes de Android.",
+                "No hay celulares vinculados. Vincula el celular del estanque en los Ajustes de Bluetooth de tu teléfono.",
                 Snackbar.LENGTH_LONG
             ).show()
             return
@@ -94,11 +95,11 @@ class EstacionActivity : AppCompatActivity() {
 
         val deviceNames = bondedDevices.map { device ->
             val name = try { device.name ?: device.address } catch (_: SecurityException) { device.address }
-            "$name\n[${device.address}]"
+            name
         }.toTypedArray()
 
         MaterialAlertDialogBuilder(this)
-            .setTitle("Seleccionar Nodo Sensor (ESP32)")
+            .setTitle(getString(R.string.estacion_device_prompt))
             .setItems(deviceNames) { _, which ->
                 val selected = bondedDevices[which]
                 viewModel.setSelectedDevice(selected)
@@ -108,7 +109,6 @@ class EstacionActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        // Observación del StateFlow seguro dentro del ciclo de vida (repeatOnLifecycle)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -117,10 +117,18 @@ class EstacionActivity : AppCompatActivity() {
                     }
                 }
 
-                // Observación de eventos emergentes para Snackbar (caídas de conexión, comandos, ACKs)
                 launch {
                     viewModel.snackbarEvent.collect { message ->
-                        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+                        val friendlyMessage = when {
+                            message.contains("Desconectado") || message.contains("caída") ->
+                                "Se perdió la conexión con el estanque. Presiona 'Conectar' para reanudar."
+                            message.contains("Conectado con éxito") ->
+                                "¡Conexión establecida con el estanque!"
+                            message.contains("Alimentación forzada") ->
+                                "Orden de alimentación enviada con éxito."
+                            else -> message
+                        }
+                        Snackbar.make(binding.root, friendlyMessage, Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -129,106 +137,163 @@ class EstacionActivity : AppCompatActivity() {
 
     private fun renderUi(state: EstacionViewModel.UiState) {
         // 1. Selector y Botones de Conexión
-        binding.btnSelectDevice.text = state.selectedDeviceName
-        binding.tvEstacionConnectionStatus.text = state.statusText
+        binding.btnSelectDevice.text = state.selectedDeviceName.ifEmpty { getString(R.string.estacion_device_select_hint) }
+        binding.tvEstacionConnectionStatus.text = when {
+            state.isConnected -> "Conectado"
+            state.isConnecting -> "Conectando..."
+            else -> "Desconectado"
+        }
 
         if (state.isConnected) {
             binding.viewConnectionDot.setBackgroundResource(R.drawable.circle_status_connected)
+            binding.tvEstacionConnectionStatus.setTextColor(ContextCompat.getColor(this, R.color.status_ok))
             binding.btnConnect.isEnabled = false
             binding.btnDisconnect.isEnabled = true
             binding.btnSelectDevice.isEnabled = false
         } else if (state.isConnecting) {
             binding.viewConnectionDot.setBackgroundResource(R.drawable.circle_status_inactive)
+            binding.tvEstacionConnectionStatus.setTextColor(ContextCompat.getColor(this, R.color.status_warning))
             binding.btnConnect.isEnabled = false
             binding.btnDisconnect.isEnabled = true
             binding.btnSelectDevice.isEnabled = false
         } else {
             binding.viewConnectionDot.setBackgroundResource(R.drawable.circle_status_inactive)
+            binding.tvEstacionConnectionStatus.setTextColor(ContextCompat.getColor(this, R.color.md_theme_onSurfaceVariant))
             binding.btnConnect.isEnabled = true
             binding.btnDisconnect.isEnabled = false
             binding.btnSelectDevice.isEnabled = true
         }
 
-        // 2. Indicador de Última Actualización y Datos Desactualizados (> 6s)
+        // 2. Banner Resumen Estilo Semáforo
         val tele = state.telemetria
-        if (tele.timestamp > 0L) {
-            binding.tvUltimaActualizacion.text = "Última actualización hace ${state.segundosDesdeUltimaActualizacion} s"
+        if (state.isConnected && tele.timestamp > 0L) {
+            val tempOutOfRange = (tele.temperatura < 18.0f || tele.temperatura > 26.0f)
+            val turbOutOfRange = (tele.turbidez > 60.0f)
+
+            if (tempOutOfRange || turbOutOfRange) {
+                binding.cardStatusBanner.setBackgroundResource(R.drawable.bg_banner_alert)
+                binding.imgBannerStatus.setImageResource(R.drawable.ic_warning)
+                binding.imgBannerStatus.imageTintList = ContextCompat.getColorStateList(this, R.color.status_alert)
+                binding.tvBannerTitle.text = getString(R.string.estacion_banner_alert_title)
+                binding.tvBannerTitle.setTextColor(ContextCompat.getColor(this, R.color.status_alert))
+                binding.tvBannerDesc.text = when {
+                    tempOutOfRange && turbOutOfRange -> "Temperatura y turbidez fuera del rango óptimo para los salmones."
+                    tempOutOfRange -> "La temperatura del agua está fuera del rango ideal (18 a 26 °C)."
+                    else -> "La turbidez del agua supera el 60 % recomendado."
+                }
+            } else {
+                binding.cardStatusBanner.setBackgroundResource(R.drawable.bg_banner_ok)
+                binding.imgBannerStatus.setImageResource(R.drawable.ic_check_circle)
+                binding.imgBannerStatus.imageTintList = ContextCompat.getColorStateList(this, R.color.status_ok)
+                binding.tvBannerTitle.text = getString(R.string.estacion_banner_ok_title)
+                binding.tvBannerTitle.setTextColor(ContextCompat.getColor(this, R.color.status_ok))
+                binding.tvBannerDesc.text = getString(R.string.estacion_banner_ok_desc)
+            }
+        } else if (state.isConnected) {
+            binding.cardStatusBanner.setBackgroundResource(R.drawable.bg_banner_warning)
+            binding.imgBannerStatus.setImageResource(R.drawable.ic_info)
+            binding.imgBannerStatus.imageTintList = ContextCompat.getColorStateList(this, R.color.status_warning)
+            binding.tvBannerTitle.text = "Conectado al estanque"
+            binding.tvBannerTitle.setTextColor(ContextCompat.getColor(this, R.color.status_warning))
+            binding.tvBannerDesc.text = "Esperando la primera lectura de los sensores..."
         } else {
-            binding.tvUltimaActualizacion.text = "Esperando telemetría del Nodo Sensor..."
+            binding.cardStatusBanner.setBackgroundResource(R.drawable.bg_banner_warning)
+            binding.imgBannerStatus.setImageResource(R.drawable.ic_warning)
+            binding.imgBannerStatus.imageTintList = ContextCompat.getColorStateList(this, R.color.status_warning)
+            binding.tvBannerTitle.text = getString(R.string.estacion_banner_waiting_title)
+            binding.tvBannerTitle.setTextColor(ContextCompat.getColor(this, R.color.status_warning))
+            binding.tvBannerDesc.text = getString(R.string.estacion_banner_waiting_desc)
+        }
+
+        // 3. Indicador de Última Actualización y Datos Desactualizados (> 6s)
+        if (tele.timestamp > 0L) {
+            binding.tvUltimaActualizacion.text = "Actualizado hace ${state.segundosDesdeUltimaActualizacion} s"
+        } else {
+            binding.tvUltimaActualizacion.text = getString(R.string.estacion_waiting_telemetry)
         }
 
         if (state.isDatosDesactualizados) {
             binding.tvAlertaDesactualizado.visibility = View.VISIBLE
-            binding.tvUltimaActualizacion.setTextColor(ContextCompat.getColor(this, R.color.status_active))
+            binding.tvUltimaActualizacion.setTextColor(ContextCompat.getColor(this, R.color.status_warning))
         } else {
             binding.tvAlertaDesactualizado.visibility = View.GONE
-            binding.tvUltimaActualizacion.setTextColor(ContextCompat.getColor(this, R.color.md_theme_dark_onSurfaceVariant))
+            binding.tvUltimaActualizacion.setTextColor(ContextCompat.getColor(this, R.color.md_theme_onSurfaceVariant))
         }
 
-        // 3. Tarjeta 1: Temperatura (°C) con alerta fuera de rango en rojo
+        // 4. Tarjeta 1: Temperatura (°C) con alerta fuera de rango
         if (tele.timestamp > 0L) {
             binding.tvTempValor.text = String.format("%.1f °C", tele.temperatura)
             val fueraDeRango = (tele.temperatura < 18.0f || tele.temperatura > 26.0f)
             if (fueraDeRango) {
-                binding.tvTempValor.setTextColor(ContextCompat.getColor(this, R.color.status_active))
-                binding.tvTempEstadoRango.text = if (tele.temperatura < 18.0f) "Baja (<18°C)" else "Crítica (>26°C)"
-                binding.tvTempEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.status_active))
+                binding.tvTempValor.setTextColor(ContextCompat.getColor(this, R.color.status_alert))
+                binding.tvTempEstadoRango.text = if (tele.temperatura < 18.0f) "Baja (<18°C)" else "Alta (>26°C)"
+                binding.tvTempEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.status_alert))
             } else {
-                binding.tvTempValor.setTextColor(ContextCompat.getColor(this, R.color.accent_blue))
-                binding.tvTempEstadoRango.text = "Óptima (18-26°C)"
-                binding.tvTempEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.status_inactive))
+                binding.tvTempValor.setTextColor(ContextCompat.getColor(this, R.color.md_theme_primary))
+                binding.tvTempEstadoRango.text = "Normal (18 a 26 °C)"
+                binding.tvTempEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.status_ok))
             }
+        } else {
+            binding.tvTempValor.text = "--.- °C"
+            binding.tvTempValor.setTextColor(ContextCompat.getColor(this, R.color.md_theme_onSurfaceVariant))
+            binding.tvTempEstadoRango.text = "Sin datos"
+            binding.tvTempEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.md_theme_onSurfaceVariant))
         }
 
-        // 4. Tarjeta 2: Turbidez (%) con alerta fuera de rango en rojo
+        // 5. Tarjeta 2: Turbidez (%) con alerta fuera de rango
         if (tele.timestamp > 0L) {
             binding.tvTurbValor.text = String.format("%.1f %%", tele.turbidez)
             val turbidezExcedida = (tele.turbidez > 60.0f)
             if (turbidezExcedida) {
-                binding.tvTurbValor.setTextColor(ContextCompat.getColor(this, R.color.status_active))
-                binding.tvTurbEstadoRango.text = "Turbia (>60%)"
-                binding.tvTurbEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.status_active))
+                binding.tvTurbValor.setTextColor(ContextCompat.getColor(this, R.color.status_alert))
+                binding.tvTurbEstadoRango.text = "Agua turbia (>60%)"
+                binding.tvTurbEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.status_alert))
             } else {
-                binding.tvTurbValor.setTextColor(ContextCompat.getColor(this, R.color.accent_blue))
-                binding.tvTurbEstadoRango.text = "Óptima (<=60%)"
-                binding.tvTurbEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.status_inactive))
+                binding.tvTurbValor.setTextColor(ContextCompat.getColor(this, R.color.md_theme_primary))
+                binding.tvTurbEstadoRango.text = "Normal (<=60%)"
+                binding.tvTurbEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.status_ok))
             }
+        } else {
+            binding.tvTurbValor.text = "--.- %"
+            binding.tvTurbValor.setTextColor(ContextCompat.getColor(this, R.color.md_theme_onSurfaceVariant))
+            binding.tvTurbEstadoRango.text = "Sin datos"
+            binding.tvTurbEstadoRango.setTextColor(ContextCompat.getColor(this, R.color.md_theme_onSurfaceVariant))
         }
 
-        // 5. Tarjeta 3: Aireador (ACTIVADO en rojo #FF6B6B / APAGADO en verde #7CFC00)
+        // 6. Tarjeta 3: Aireador
         if (tele.aireadorEncendido) {
-            binding.tvAireadorValor.text = "ACTIVADO"
-            binding.tvAireadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_active))
+            binding.tvAireadorValor.text = "ENCENDIDO"
+            binding.tvAireadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_alert))
         } else {
             binding.tvAireadorValor.text = "APAGADO"
-            binding.tvAireadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_inactive))
+            binding.tvAireadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_ok))
         }
         binding.tvAireadorModoDisplay.text = "Modo: ${tele.modoAireador}"
 
-        // 6. Tarjeta 4: Alimentador y Contador Regresivo Sincronizado
+        // 7. Tarjeta 4: Alimentador y Cuenta Regresiva Sincronizada
         when {
             tele.alimentadorActivo -> {
-                binding.tvAlimentadorValor.text = "ACTIVADO"
-                binding.tvAlimentadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_active))
-                binding.tvAlimentadorMensajeDisplay.text = "Alimentando ahora..."
-                binding.tvAlimentadorMensajeDisplay.setTextColor(ContextCompat.getColor(this, R.color.status_active))
+                binding.tvAlimentadorValor.text = "DISPENSANDO"
+                binding.tvAlimentadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_alert))
+                binding.tvAlimentadorMensajeDisplay.text = "Dispensando alimento..."
+                binding.tvAlimentadorMensajeDisplay.setTextColor(ContextCompat.getColor(this, R.color.status_alert))
             }
             tele.alimentadorPospuesto -> {
                 binding.tvAlimentadorValor.text = "POSPUESTO"
-                binding.tvAlimentadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_active))
-                binding.tvAlimentadorMensajeDisplay.text = "En espera (aireador activo)"
-                binding.tvAlimentadorMensajeDisplay.setTextColor(ContextCompat.getColor(this, R.color.status_active))
+                binding.tvAlimentadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_warning))
+                binding.tvAlimentadorMensajeDisplay.text = "En espera (aireador encendido)"
+                binding.tvAlimentadorMensajeDisplay.setTextColor(ContextCompat.getColor(this, R.color.status_warning))
             }
             else -> {
                 binding.tvAlimentadorValor.text = "EN ESPERA"
-                binding.tvAlimentadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_inactive))
+                binding.tvAlimentadorValor.setTextColor(ContextCompat.getColor(this, R.color.status_ok))
                 val segs = tele.proxAlimentacionSegundos
-                binding.tvAlimentadorMensajeDisplay.text = "Próxima alimentación en $segs s"
-                binding.tvAlimentadorMensajeDisplay.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.tvAlimentadorMensajeDisplay.text = "Próxima comida en: $segs s"
+                binding.tvAlimentadorMensajeDisplay.setTextColor(ContextCompat.getColor(this, R.color.md_theme_onSurfaceVariant))
             }
         }
 
-        // 7. Habilitación de Botones de Comandos según estado de conexión
+        // 8. Habilitación de Botones de Comandos según estado de conexión
         binding.btnForzarAlimentacion.isEnabled = state.isConnected
         binding.btnAireadorAuto.isEnabled = state.isConnected
         binding.btnAireadorOn.isEnabled = state.isConnected

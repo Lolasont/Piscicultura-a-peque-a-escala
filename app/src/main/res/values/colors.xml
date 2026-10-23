@@ -1,31 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Paleta inspirada en agua y ambiente acuícola (Tema Oscuro M3) -->
-    <color name="bg_dark">#0D1B2A</color>
-    <color name="card_dark">#1B263B</color>
-    <color name="card_stroke">#415A77</color>
-    <color name="accent_blue">#66C2FF</color>
-    <color name="accent_blue_variant">#3399FF</color>
-    <color name="status_active">#FF6B6B</color>
-    <color name="status_inactive">#7CFC00</color>
+    <!-- Paleta Acuática Modo Claro (Material Design 3) -->
+    <color name="md_theme_primary">#0288D1</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#E1F5FE</color>
+    <color name="md_theme_onPrimaryContainer">#001F2A</color>
+    <color name="md_theme_secondary">#4A6267</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#CEE7EC</color>
+    <color name="md_theme_onSecondaryContainer">#051F23</color>
+    <color name="md_theme_background">#F8F9FA</color>
+    <color name="md_theme_onBackground">#191C1D</color>
+    <color name="md_theme_surface">#FFFFFF</color>
+    <color name="md_theme_onSurface">#191C1D</color>
+    <color name="md_theme_surfaceVariant">#EBF2F7</color>
+    <color name="md_theme_onSurfaceVariant">#546E7A</color>
+    <color name="md_theme_outline">#CFD8DC</color>
 
-    <!-- Colores base para Material 3 -->
-    <color name="md_theme_dark_primary">#66C2FF</color>
-    <color name="md_theme_dark_onPrimary">#003355</color>
-    <color name="md_theme_dark_primaryContainer">#1B263B</color>
-    <color name="md_theme_dark_onPrimaryContainer">#D1E4FF</color>
-    <color name="md_theme_dark_secondary">#778DA9</color>
-    <color name="md_theme_dark_onSecondary">#1B263B</color>
-    <color name="md_theme_dark_background">#0D1B2A</color>
-    <color name="md_theme_dark_onBackground">#E0E1DD</color>
-    <color name="md_theme_dark_surface">#1B263B</color>
-    <color name="md_theme_dark_onSurface">#E0E1DD</color>
-    <color name="md_theme_dark_surfaceVariant">#25354F</color>
-    <color name="md_theme_dark_onSurfaceVariant">#A0AAB5</color>
-    <color name="md_theme_dark_outline">#415A77</color>
-    <color name="md_theme_dark_error">#FF6B6B</color>
-    <color name="md_theme_dark_onError">#330000</color>
+    <!-- Semáforo y estados funcionales accesibles -->
+    <color name="status_ok">#2E7D32</color>
+    <color name="status_warning">#ED6C02</color>
+    <color name="status_alert">#D32F2F</color>
 
-    <color name="white">#FFFFFFFF</color>
-    <color name="black">#FF000000</color>
+    <!-- Fondos suaves para banners de alerta tipo semáforo -->
+    <color name="banner_ok_bg">#E8F5E9</color>
+    <color name="banner_warning_bg">#FFF3E0</color>
+    <color name="banner_alert_bg">#FFEBEE</color>
+
+    <!-- Compatibilidad de nombres previos -->
+    <color name="accent_blue">#0288D1</color>
+    <color name="accent_blue_variant">#0077B6</color>
+    <color name="bg_dark">#F8F9FA</color>
+    <color name="card_dark">#FFFFFF</color>
+    <color name="card_stroke">#E0E6ED</color>
+    <color name="status_active">#D32F2F</color>
+    <color name="status_inactive">#2E7D32</color>
+
+    <!-- Aliases previos -->
+    <color name="md_theme_dark_primary">#0288D1</color>
+    <color name="md_theme_dark_onPrimary">#FFFFFF</color>
+    <color name="md_theme_dark_primaryContainer">#E1F5FE</color>
+    <color name="md_theme_dark_onPrimaryContainer">#001F2A</color>
+    <color name="md_theme_dark_secondary">#4A6267</color>
+    <color name="md_theme_dark_onSecondary">#FFFFFF</color>
+    <color name="md_theme_dark_background">#F8F9FA</color>
+    <color name="md_theme_dark_onBackground">#191C1D</color>
+    <color name="md_theme_dark_surface">#FFFFFF</color>
+    <color name="md_theme_dark_onSurface">#191C1D</color>
+    <color name="md_theme_dark_surfaceVariant">#EBF2F7</color>
+    <color name="md_theme_dark_onSurfaceVariant">#546E7A</color>
+    <color name="md_theme_dark_outline">#CFD8DC</color>
+    <color name="md_theme_dark_error">#D32F2F</color>
+    <color name="md_theme_dark_onError">#FFFFFF</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 </resources>

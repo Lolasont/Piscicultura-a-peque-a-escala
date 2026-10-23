@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Paleta Acuática Modo Oscuro (Material Design 3 Azul Noche) -->
+    <color name="md_theme_primary">#66C2FF</color>
+    <color name="md_theme_onPrimary">#003355</color>
+    <color name="md_theme_primaryContainer">#14283E</color>
+    <color name="md_theme_onPrimaryContainer">#D1E4FF</color>
+    <color name="md_theme_secondary">#B1CBD0</color>
+    <color name="md_theme_onSecondary">#1C3438</color>
+    <color name="md_theme_secondaryContainer">#253A44</color>
+    <color name="md_theme_onSecondaryContainer">#CEE7EC</color>
+    <color name="md_theme_background">#0B192C</color>
+    <color name="md_theme_onBackground">#E0E1DD</color>
+    <color name="md_theme_surface">#1A2942</color>
+    <color name="md_theme_onSurface">#E0E1DD</color>
+    <color name="md_theme_surfaceVariant">#243754</color>
+    <color name="md_theme_onSurfaceVariant">#A0B0C0</color>
+    <color name="md_theme_outline">#2C4263</color>
+
+    <!-- Semáforo y estados funcionales accesibles en fondo oscuro -->
+    <color name="status_ok">#4CAF50</color>
+    <color name="status_warning">#FFA726</color>
+    <color name="status_alert">#EF5350</color>
+
+    <!-- Fondos para banners estilo semáforo en tema oscuro -->
+    <color name="banner_ok_bg">#142B1A</color>
+    <color name="banner_warning_bg">#332412</color>
+    <color name="banner_alert_bg">#38161B</color>
+
+    <!-- Compatibilidad de nombres previos -->
+    <color name="accent_blue">#66C2FF</color>
+    <color name="accent_blue_variant">#3399FF</color>
+    <color name="bg_dark">#0B192C</color>
+    <color name="card_dark">#1A2942</color>
+    <color name="card_stroke">#2C4263</color>
+    <color name="status_active">#EF5350</color>
+    <color name="status_inactive">#4CAF50</color>
+
+    <!-- Aliases previos -->
+    <color name="md_theme_dark_primary">#66C2FF</color>
+    <color name="md_theme_dark_onPrimary">#003355</color>
+    <color name="md_theme_dark_primaryContainer">#14283E</color>
+    <color name="md_theme_dark_onPrimaryContainer">#D1E4FF</color>
+    <color name="md_theme_dark_secondary">#B1CBD0</color>
+    <color name="md_theme_dark_onSecondary">#1C3438</color>
+    <color name="md_theme_dark_background">#0B192C</color>
+    <color name="md_theme_dark_onBackground">#E0E1DD</color>
+    <color name="md_theme_dark_surface">#1A2942</color>
+    <color name="md_theme_dark_onSurface">#E0E1DD</color>
+    <color name="md_theme_dark_surfaceVariant">#243754</color>
+    <color name="md_theme_dark_onSurfaceVariant">#A0B0C0</color>
+    <color name="md_theme_dark_outline">#2C4263</color>
+    <color name="md_theme_dark_error">#EF5350</color>
+    <color name="md_theme_dark_onError">#330000</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

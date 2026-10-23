@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -13,10 +14,10 @@ import com.example.databinding.ActivityNodoBinding
 import kotlinx.coroutines.launch
 
 /**
- * Actividad del ROL NODO SENSOR (Simulador ESP32).
+ * Actividad del ROL ESTANQUE (Simulador con sensores y actuadores).
  * Conecta los sliders de temperatura y turbidez con el NodoViewModel,
- * muestra los actuadores (aireador y alimentador) con código de colores,
- * y gestiona el inicio y detención del servidor Bluetooth RFCOMM.
+ * muestra los equipos (aireador y alimentador) con estados claros y colores accesibles,
+ * y gestiona el inicio y detención de la comunicación Bluetooth.
  * Sobrevive a la rotación de pantalla sin perder estado ni desconectar la sesión.
  */
 class NodoActivity : AppCompatActivity() {
@@ -25,6 +26,7 @@ class NodoActivity : AppCompatActivity() {
     private val viewModel: NodoViewModel by viewModels()
 
     private var bluetoothAdapter: BluetoothAdapter? = null
+    private var isLogExpanded: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +55,7 @@ class NodoActivity : AppCompatActivity() {
             }
         }
 
-        // Botón de encendido / apagado del Servidor Bluetooth RFCOMM
+        // Botón de inicio / detención del Estanque
         binding.btnToggleServer.setOnClickListener {
             val currentState = viewModel.uiState.value
             if (currentState.isServerListening || currentState.isEstacionConectada) {
@@ -67,66 +69,100 @@ class NodoActivity : AppCompatActivity() {
         binding.btnForzarAlimentacionLocal.setOnClickListener {
             viewModel.forzarAlimentacionManual()
         }
+
+        // Desplegable de detalles técnicos
+        binding.btnToggleLog.setOnClickListener {
+            isLogExpanded = !isLogExpanded
+            binding.tvLogEventos.visibility = if (isLogExpanded) View.VISIBLE else View.GONE
+            binding.btnToggleLog.text = if (isLogExpanded) {
+                getString(R.string.nodo_btn_hide_log)
+            } else {
+                getString(R.string.nodo_btn_toggle_log)
+            }
+            binding.btnToggleLog.setIconResource(
+                if (isLogExpanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more
+            )
+        }
     }
 
     private fun observeViewModel() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
-                // 1. Sliders y etiquetas de valor (sin disparar ciclos si el usuario no los toca)
+                // 1. Sliders y etiquetas de valor
                 binding.tvTempDisplay.text = String.format("%.1f °C", state.temperatura)
+                val tempOutOfRange = (state.temperatura < 18.0f || state.temperatura > 26.0f)
+                binding.tvTempDisplay.setTextColor(
+                    ContextCompat.getColor(
+                        this@NodoActivity,
+                        if (tempOutOfRange) R.color.status_alert else R.color.md_theme_primary
+                    )
+                )
+
                 if (Math.abs(binding.sliderTemperatura.value - state.temperatura) > 0.49f) {
                     binding.sliderTemperatura.value = state.temperatura
                 }
 
                 binding.tvTurbDisplay.text = String.format("%.1f %%", state.turbidez)
+                val turbOutOfRange = (state.turbidez > 60.0f)
+                binding.tvTurbDisplay.setTextColor(
+                    ContextCompat.getColor(
+                        this@NodoActivity,
+                        if (turbOutOfRange) R.color.status_alert else R.color.md_theme_primary
+                    )
+                )
+
                 if (Math.abs(binding.sliderTurbidez.value - state.turbidez) > 0.99f) {
                     binding.sliderTurbidez.value = state.turbidez
                 }
 
-                // 2. Estado del Servidor Bluetooth y Botón Toggle
-                binding.tvConnectionStatus.text = state.serverStatusText
-
+                // 2. Estado de Conexión del Estanque y Botón Toggle
                 if (state.isEstacionConectada) {
-                    binding.btnToggleServer.text = "Desconectar"
-                    binding.btnToggleServer.backgroundTintList = ContextCompat.getColorStateList(this@NodoActivity, R.color.status_active)
-                    binding.tvServerSubtext.text = "Conectado a: ${state.nombreEstacionConectada}"
+                    binding.tvConnectionStatus.text = getString(R.string.nodo_connection_connected)
+                    binding.tvConnectionStatus.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_ok))
+                    binding.btnToggleServer.text = getString(R.string.nodo_btn_stop)
+                    binding.btnToggleServer.backgroundTintList = ContextCompat.getColorStateList(this@NodoActivity, R.color.status_alert)
+                    binding.tvServerSubtext.text = "Conectado con Panel: ${state.nombreEstacionConectada}"
                 } else if (state.isServerListening) {
-                    binding.btnToggleServer.text = "Detener"
-                    binding.btnToggleServer.backgroundTintList = ContextCompat.getColorStateList(this@NodoActivity, R.color.status_active)
-                    binding.tvServerSubtext.text = "En espera de Estación..."
+                    binding.tvConnectionStatus.text = getString(R.string.nodo_connection_waiting)
+                    binding.tvConnectionStatus.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_warning))
+                    binding.btnToggleServer.text = getString(R.string.nodo_btn_stop)
+                    binding.btnToggleServer.backgroundTintList = ContextCompat.getColorStateList(this@NodoActivity, R.color.status_alert)
+                    binding.tvServerSubtext.text = "Esperando que el panel de control se conecte..."
                 } else {
-                    binding.btnToggleServer.text = "Iniciar Servidor"
-                    binding.btnToggleServer.backgroundTintList = ContextCompat.getColorStateList(this@NodoActivity, R.color.accent_blue)
-                    binding.tvServerSubtext.text = "Servidor detenido"
+                    binding.tvConnectionStatus.text = getString(R.string.nodo_connection_stopped)
+                    binding.tvConnectionStatus.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.md_theme_onSurfaceVariant))
+                    binding.btnToggleServer.text = getString(R.string.nodo_btn_start)
+                    binding.btnToggleServer.backgroundTintList = ContextCompat.getColorStateList(this@NodoActivity, R.color.md_theme_primary)
+                    binding.tvServerSubtext.text = getString(R.string.nodo_server_subtext)
                 }
 
-                // 3. Tarjeta del Aireador (ACTIVADO en rojo #FF6B6B / APAGADO en verde #7CFC00)
+                // 3. Tarjeta del Aireador
                 if (state.aireadorEncendido) {
-                    binding.tvAireadorEstado.text = "ACTIVADO"
-                    binding.tvAireadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_active))
+                    binding.tvAireadorEstado.text = getString(R.string.nodo_aerator_on)
+                    binding.tvAireadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_alert))
                 } else {
-                    binding.tvAireadorEstado.text = "APAGADO"
-                    binding.tvAireadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_inactive))
+                    binding.tvAireadorEstado.text = getString(R.string.nodo_aerator_off)
+                    binding.tvAireadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_ok))
                 }
                 binding.tvAireadorModo.text = "Modo: ${state.modoAireador}"
 
-                // 4. Tarjeta del Alimentador (ACTIVADO en rojo #FF6B6B / en espera)
+                // 4. Tarjeta del Alimentador
                 when {
                     state.alimentadorActivo -> {
-                        binding.tvAlimentadorEstado.text = "DISPENSANDO"
-                        binding.tvAlimentadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_active))
-                        binding.tvAlimentadorCuenta.text = "Alimentando salmones..."
+                        binding.tvAlimentadorEstado.text = getString(R.string.nodo_feeder_dispensing)
+                        binding.tvAlimentadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_alert))
+                        binding.tvAlimentadorCuenta.text = "Dispensando alimento ahora..."
                     }
                     state.alimentadorPospuesto -> {
-                        binding.tvAlimentadorEstado.text = "POSPUESTO"
-                        binding.tvAlimentadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_active))
-                        binding.tvAlimentadorCuenta.text = "En espera (aireador activo)"
+                        binding.tvAlimentadorEstado.text = getString(R.string.nodo_feeder_postponed)
+                        binding.tvAlimentadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_warning))
+                        binding.tvAlimentadorCuenta.text = getString(R.string.nodo_feeder_postponed_help)
                     }
                     else -> {
                         val segs = (state.proxAlimentacionMs / 1000L).coerceAtLeast(0L)
-                        binding.tvAlimentadorEstado.text = "EN ESPERA"
-                        binding.tvAlimentadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_inactive))
-                        binding.tvAlimentadorCuenta.text = "Próxima en: $segs s"
+                        binding.tvAlimentadorEstado.text = getString(R.string.nodo_feeder_waiting)
+                        binding.tvAlimentadorEstado.setTextColor(ContextCompat.getColor(this@NodoActivity, R.color.status_ok))
+                        binding.tvAlimentadorCuenta.text = "Próxima comida en: $segs s"
                     }
                 }
 
@@ -139,7 +175,6 @@ class NodoActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Si el usuario sale de la actividad de forma permanente (isFinishing), detiene el servidor
         if (isFinishing) {
             viewModel.detenerServidor()
         }

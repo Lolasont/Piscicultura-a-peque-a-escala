@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark"
+    android:background="?android:attr/colorBackground"
     android:fillViewport="true">
 
     <LinearLayout
@@ -26,11 +26,12 @@
                 style="@style/Widget.Material3.Chip.Assist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ROL: ESTACIÓN DE MONITOREO"
-                android:textColor="@color/accent_blue"
+                android:text="@string/estacion_chip_header"
+                android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
-                app:chipBackgroundColor="@color/card_dark"
-                app:chipStrokeColor="@color/accent_blue"
+                app:chipBackgroundColor="?attr/colorSurfaceVariant"
+                app:chipCornerRadius="10dp"
+                app:chipStrokeColor="?attr/colorPrimary"
                 app:chipStrokeWidth="1.5dp" />
 
             <View
@@ -51,83 +52,141 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Desconectado"
-                android:textColor="@color/md_theme_dark_onSurface"
-                android:textSize="12sp"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Panel de Selección de Dispositivo Bluetooth y Conexión -->
+        <!-- Panel de Selección de Dispositivo y Botones de Conexión -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardBackgroundColor="@color/card_dark"
-            app:cardCornerRadius="12dp"
-            app:strokeColor="@color/card_stroke"
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeColor="?attr/colorOutline"
             app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dispositivo Nodo Sensor (ESP32)"
-                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
-                    android:textSize="12sp" />
+                    android:text="@string/estacion_device_prompt"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
-                <!-- Selector de dispositivo emparejado -->
+                <!-- Selector de celular del estanque -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSelectDevice"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="Seleccionar dispositivo emparejado..."
-                    android:textColor="@color/accent_blue"
-                    app:cornerRadius="8dp"
-                    app:strokeColor="@color/accent_blue" />
+                    android:text="@string/estacion_device_select_hint"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_bluetooth"
+                    app:iconSize="18dp"
+                    app:strokeColor="?attr/colorOutline" />
 
                 <!-- Botones de Conectar / Desconectar -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnConnect"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_marginEnd="4dp"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="6dp"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/accent_blue"
-                        android:text="Conectar"
-                        android:textColor="@color/md_theme_dark_onPrimary"
+                        android:text="@string/estacion_btn_connect"
+                        android:textSize="15sp"
                         android:textStyle="bold"
-                        app:cornerRadius="8dp" />
+                        app:cornerRadius="10dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnDisconnect"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_marginStart="4dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="6dp"
                         android:layout_weight="1"
-                        android:text="Desconectar"
-                        android:textColor="@color/status_active"
-                        app:cornerRadius="8dp"
-                        app:strokeColor="@color/status_active" />
+                        android:text="@string/estacion_btn_disconnect"
+                        android:textColor="@color/status_alert"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="@color/status_alert" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Barra de Estado de Telemetría: Última actualización y advertencia de datos obsoletos -->
+        <!-- BANNER RESUMEN ESTILO SEMÁFORO -->
+        <FrameLayout
+            android:id="@+id/cardStatusBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_banner_warning">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <ImageView
+                    android:id="@+id/imgBannerStatus"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="Estado del estanque"
+                    android:src="@drawable/ic_warning"
+                    app:tint="@color/status_warning" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvBannerTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/estacion_banner_waiting_title"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvBannerDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/estacion_banner_waiting_desc"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp"
+                        android:lineSpacingExtra="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Barra de Frescura de Telemetría -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,23 +199,23 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Esperando telemetría..."
-                android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                android:text="@string/estacion_waiting_telemetry"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvAlertaDesactualizado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="⚠ Datos desactualizados (>6s)"
-                android:textColor="@color/status_active"
+                android:text="@string/estacion_data_outdated_warning"
+                android:textColor="@color/status_warning"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:visibility="gone"
                 tools:visibility="visible" />
         </LinearLayout>
 
-        <!-- DASHBOARD 4 TARJETAS MATERIAL -->
+        <!-- DASHBOARD 4 TARJETAS MATERIAL (CUADRÍCULA 2x2) -->
         <!-- FILA 1: TEMPERATURA Y TURBIDEZ -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -171,25 +230,40 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/card_dark"
-                app:cardCornerRadius="14dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TEMPERATURA"
-                        android:textColor="@color/md_theme_dark_onSurfaceVariant"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:contentDescription="@string/estacion_card_temp_title"
+                            android:src="@drawable/ic_thermostat"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="@string/estacion_card_temp_title"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvTempValor"
@@ -197,7 +271,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:text="--.- °C"
-                        android:textColor="@color/accent_blue"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="26sp"
                         android:textStyle="bold" />
 
@@ -207,8 +281,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Sin datos"
-                        android:textColor="@color/status_inactive"
-                        android:textSize="12sp" />
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/estacion_temp_ideal_label"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -219,25 +302,40 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/card_dark"
-                app:cardCornerRadius="14dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TURBIDEZ"
-                        android:textColor="@color/md_theme_dark_onSurfaceVariant"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:contentDescription="@string/estacion_card_turb_title"
+                            android:src="@drawable/ic_water_drop"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="@string/estacion_card_turb_title"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvTurbValor"
@@ -245,7 +343,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:text="--.- %"
-                        android:textColor="@color/accent_blue"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="26sp"
                         android:textStyle="bold" />
 
@@ -255,8 +353,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Sin datos"
-                        android:textColor="@color/status_inactive"
-                        android:textSize="12sp" />
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/estacion_turb_ideal_label"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
@@ -275,25 +382,40 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/card_dark"
-                app:cardCornerRadius="14dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="AIREADOR"
-                        android:textColor="@color/md_theme_dark_onSurfaceVariant"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:contentDescription="@string/estacion_card_aerator_title"
+                            android:src="@drawable/ic_fan"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="@string/estacion_card_aerator_title"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvAireadorValor"
@@ -301,7 +423,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:text="APAGADO"
-                        android:textColor="@color/status_inactive"
+                        android:textColor="@color/status_ok"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -311,8 +433,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Modo: AUTO"
-                        android:textColor="@color/accent_blue"
-                        android:textSize="11sp" />
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -323,25 +445,40 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/card_dark"
-                app:cardCornerRadius="14dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="ALIMENTADOR"
-                        android:textColor="@color/md_theme_dark_onSurfaceVariant"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:contentDescription="@string/estacion_card_feeder_title"
+                            android:src="@drawable/ic_food"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="@string/estacion_card_feeder_title"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvAlimentadorValor"
@@ -349,7 +486,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:text="EN ESPERA"
-                        android:textColor="@color/status_inactive"
+                        android:textColor="@color/status_ok"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -358,44 +495,45 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:gravity="center"
-                        android:text="Próxima alimentación en 15 s"
-                        android:textColor="@color/white"
-                        android:textSize="11sp" />
+                        android:text="Próxima en: 15 s"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <!-- PANEL DE CONTROL OT (COMANDOS HACIA EL NODO) -->
+        <!-- PANEL DE CONTROL DE EQUIPOS A DISTANCIA -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Panel de Comandos OT (Hacia Nodo Sensor)"
-            android:textColor="@color/md_theme_dark_onSurface"
-            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:text="@string/estacion_remote_actions_title"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <!-- Botón Forzar Alimentación Inmediata -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnForzarAlimentacion"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@color/accent_blue"
-            android:text="Forzar Alimentación Inmediata"
-            android:textColor="@color/md_theme_dark_onPrimary"
+            android:layout_height="54dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/estacion_btn_feed_now"
+            android:textSize="15sp"
             android:textStyle="bold"
-            app:cornerRadius="10dp" />
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_food"
+            app:iconGravity="textStart"
+            app:iconSize="20dp" />
 
-        <!-- Selector de Modo de Aireador (Auto, Manual ON, Manual OFF) -->
+        <!-- Selector de Modo de Aireador -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Control Remoto del Aireador:"
-            android:textColor="@color/md_theme_dark_onSurfaceVariant"
-            android:textSize="12sp" />
+            android:layout_marginTop="14dp"
+            android:text="@string/estacion_aerator_mode_title"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="13sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -407,38 +545,49 @@
                 android:id="@+id/btnAireadorAuto"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:text="AUTO"
-                android:textColor="@color/accent_blue"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/accent_blue" />
+                android:text="@string/estacion_btn_mode_auto"
+                android:textSize="13sp"
+                app:cornerRadius="10dp"
+                app:strokeColor="?attr/colorPrimary" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAireadorOn"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginHorizontal="4dp"
                 android:layout_weight="1"
-                android:text="MANUAL ON"
-                android:textColor="@color/status_active"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/status_active" />
+                android:text="@string/estacion_btn_mode_on"
+                android:textColor="@color/status_alert"
+                android:textSize="13sp"
+                app:cornerRadius="10dp"
+                app:strokeColor="@color/status_alert" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAireadorOff"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginStart="4dp"
                 android:layout_weight="1"
-                android:text="MANUAL OFF"
-                android:textColor="@color/status_inactive"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/status_inactive" />
+                android:text="@string/estacion_btn_mode_off"
+                android:textColor="@color/status_ok"
+                android:textSize="13sp"
+                app:cornerRadius="10dp"
+                app:strokeColor="@color/status_ok" />
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/estacion_aerator_mode_note"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="11sp" />
+
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

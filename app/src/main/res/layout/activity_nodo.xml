@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark"
+    android:background="?android:attr/colorBackground"
     android:fillViewport="true">
 
     <LinearLayout
@@ -26,11 +26,12 @@
                 style="@style/Widget.Material3.Chip.Assist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ROL: NODO SENSOR (ESP32)"
-                android:textColor="@color/accent_blue"
+                android:text="@string/nodo_chip_header"
+                android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
-                app:chipBackgroundColor="@color/card_dark"
-                app:chipStrokeColor="@color/accent_blue"
+                app:chipBackgroundColor="?attr/colorSurfaceVariant"
+                app:chipCornerRadius="10dp"
+                app:chipStrokeColor="?attr/colorPrimary"
                 app:chipStrokeWidth="1.5dp" />
 
             <View
@@ -42,20 +43,21 @@
                 android:id="@+id/tvConnectionStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Servidor inactivo"
-                android:textColor="@color/md_theme_dark_onSurfaceVariant"
-                android:textSize="12sp"
+                android:text="@string/nodo_connection_stopped"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Controles del Servidor Bluetooth -->
+        <!-- Tarjeta de Control del Estanque (Servidor) -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardBackgroundColor="@color/card_dark"
-            app:cardCornerRadius="12dp"
-            app:strokeColor="@color/card_stroke"
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeColor="?attr/colorOutline"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -63,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="12dp">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -74,29 +76,29 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Enlace Bluetooth RFCOMM"
-                        android:textColor="@color/md_theme_dark_onSurface"
-                        android:textSize="14sp"
+                        android:text="Estado del Estanque"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvServerSubtext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="UUID SPP Estándar"
-                        android:textColor="@color/accent_blue"
-                        android:textSize="11sp" />
+                        android:layout_marginTop="2dp"
+                        android:text="@string/nodo_server_subtext"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnToggleServer"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/accent_blue"
-                    android:text="Iniciar Servidor"
-                    android:textColor="@color/md_theme_dark_onPrimary"
+                    android:layout_height="48dp"
+                    android:text="@string/nodo_btn_start"
+                    android:textSize="13sp"
                     android:textStyle="bold"
-                    app:cornerRadius="8dp" />
+                    app:cornerRadius="10dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -105,29 +107,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            app:cardBackgroundColor="@color/card_dark"
-            app:cardCornerRadius="14dp"
-            app:strokeColor="@color/card_stroke"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeColor="?attr/colorOutline"
             app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="18dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:contentDescription="@string/nodo_temp_title"
+                        android:src="@drawable/ic_thermostat"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
                         android:layout_weight="1"
-                        android:text="Temperatura del Agua"
-                        android:textColor="@color/md_theme_dark_onSurface"
-                        android:textSize="15sp"
+                        android:text="@string/nodo_temp_title"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -135,8 +147,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="21.0 °C"
-                        android:textColor="@color/accent_blue"
-                        android:textSize="18sp"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="22sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -148,16 +160,13 @@
                     android:value="21.0"
                     android:valueFrom="0.0"
                     android:valueTo="40.0"
-                    android:stepSize="0.5"
-                    app:thumbColor="@color/accent_blue"
-                    app:trackColorActive="@color/accent_blue"
-                    app:trackColorInactive="@color/card_stroke" />
+                    android:stepSize="0.5" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rango normal para salmones: 18.0 °C a 26.0 °C"
-                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:text="@string/nodo_temp_ideal"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -168,29 +177,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            app:cardBackgroundColor="@color/card_dark"
-            app:cardCornerRadius="14dp"
-            app:strokeColor="@color/card_stroke"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeColor="?attr/colorOutline"
             app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="18dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:contentDescription="@string/nodo_turb_title"
+                        android:src="@drawable/ic_water_drop"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
                         android:layout_weight="1"
-                        android:text="Turbidez del Agua"
-                        android:textColor="@color/md_theme_dark_onSurface"
-                        android:textSize="15sp"
+                        android:text="@string/nodo_turb_title"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -198,8 +217,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="20.0 %"
-                        android:textColor="@color/accent_blue"
-                        android:textSize="18sp"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="22sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -211,16 +230,13 @@
                     android:value="20.0"
                     android:valueFrom="0.0"
                     android:valueTo="100.0"
-                    android:stepSize="1.0"
-                    app:thumbColor="@color/accent_blue"
-                    app:trackColorActive="@color/accent_blue"
-                    app:trackColorInactive="@color/card_stroke" />
+                    android:stepSize="1.0" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Límite óptimo: &lt;= 60 % (mayor activa el aireador)"
-                    android:textColor="@color/md_theme_dark_onSurfaceVariant"
+                    android:text="@string/nodo_turb_ideal"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -240,33 +256,49 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/card_dark"
-                app:cardCornerRadius="14dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="AIREADOR"
-                        android:textColor="@color/md_theme_dark_onSurfaceVariant"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:contentDescription="@string/nodo_aerator_title"
+                            android:src="@drawable/ic_fan"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="@string/nodo_aerator_title"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvAireadorEstado"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="APAGADO"
-                        android:textColor="@color/status_inactive"
-                        android:textSize="17sp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/nodo_aerator_off"
+                        android:textColor="@color/status_ok"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -275,8 +307,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="Modo: AUTO"
-                        android:textColor="@color/accent_blue"
-                        android:textSize="11sp" />
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -287,33 +319,49 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/card_dark"
-                app:cardCornerRadius="14dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="ALIMENTADOR"
-                        android:textColor="@color/md_theme_dark_onSurfaceVariant"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:contentDescription="@string/nodo_feeder_title"
+                            android:src="@drawable/ic_food"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="@string/nodo_feeder_title"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvAlimentadorEstado"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="EN ESPERA"
-                        android:textColor="@color/status_inactive"
-                        android:textSize="17sp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/nodo_feeder_waiting"
+                        android:textColor="@color/status_ok"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -321,62 +369,80 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Próxima: 15 s"
-                        android:textColor="@color/white"
-                        android:textSize="11sp" />
+                        android:text="Próxima en: 15 s"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
         <!-- Mensaje de Diagnóstico de la Lógica del Estanque -->
-        <TextView
-            android:id="@+id/tvMensajeLogica"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_terminal_card"
-            android:padding="10dp"
-            android:text="Parámetros óptimos para salmónidos"
-            android:textColor="@color/accent_blue"
-            android:textSize="12sp"
-            android:fontFamily="monospace" />
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:id="@+id/tvMensajeLogica"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="14dp"
+                android:text="Condiciones normales para salmones"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="13sp" />
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Botón de prueba local para forzar alimentación -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnForzarAlimentacionLocal"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Probar Forzar Alimentación (Local)"
-            android:textColor="@color/accent_blue"
-            app:cornerRadius="8dp"
-            app:strokeColor="@color/accent_blue" />
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/nodo_btn_force_feed"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="14sp"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_food"
+            app:iconSize="18dp"
+            app:strokeColor="?attr/colorPrimary" />
 
-        <!-- Log Breve de Eventos del Nodo -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Registro de Eventos OT / Bluetooth:"
-            android:textColor="@color/md_theme_dark_onSurfaceVariant"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+        <!-- Sección Desplegable de Detalles Técnicos -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnToggleLog"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/nodo_btn_toggle_log"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="13sp"
+            app:icon="@drawable/ic_expand_more"
+            app:iconGravity="textEnd"
+            app:iconSize="18dp"
+            app:iconTint="?attr/colorOnSurfaceVariant" />
 
         <TextView
             android:id="@+id/tvLogEventos"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/bg_terminal_card"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="16dp"
+            android:background="?attr/colorSurfaceVariant"
             android:gravity="bottom"
             android:maxLines="8"
-            android:padding="10dp"
+            android:padding="12dp"
             android:scrollbars="vertical"
             android:text="[Iniciando sistema...]"
-            android:textColor="@color/md_theme_dark_onSurfaceVariant"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="11sp"
-            android:fontFamily="monospace" />
+            android:fontFamily="monospace"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
