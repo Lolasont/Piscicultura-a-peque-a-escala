@@ -65,10 +65,9 @@ class RoleSelectActivity : AppCompatActivity() {
 
         sessionManager = EncryptedSessionManager(this)
 
-        // Mostrar información del operador
-        val email = sessionManager.getSessionEmail().ifEmpty { "Operador" }
-        binding.tvWelcomeUser.text = "${getString(R.string.role_operator_label)} $email"
-        binding.tvSessionType.text = "Sesión activa y segura"
+        // Mostrar saludo fijo respetando la privacidad (sin exponer datos de correo en pantalla)
+        binding.tvWelcomeUser.text = getString(R.string.role_welcome_user)
+        binding.tvSessionType.text = getString(R.string.role_session_secure)
 
         setupListeners()
     }

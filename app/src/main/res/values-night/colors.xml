@@ -22,10 +22,11 @@
     <color name="status_warning">#FFA726</color>
     <color name="status_alert">#EF5350</color>
 
-    <!-- Fondos para banners estilo semáforo en tema oscuro -->
+    <!-- Fondos para banners estilo semáforo e informativos en tema oscuro -->
     <color name="banner_ok_bg">#142B1A</color>
     <color name="banner_warning_bg">#332412</color>
     <color name="banner_alert_bg">#38161B</color>
+    <color name="banner_info_bg">#14283E</color>
 
     <!-- Compatibilidad de nombres previos -->
     <color name="accent_blue">#66C2FF</color>

@@ -21,6 +21,8 @@
         <item name="colorOnError">@color/white</item>
         <item name="android:statusBarColor">@color/md_theme_background</item>
         <item name="android:navigationBarColor">@color/md_theme_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <!-- Compatibilidad con el nombre por defecto del template -->

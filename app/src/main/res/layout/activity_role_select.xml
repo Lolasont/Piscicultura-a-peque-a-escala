@@ -31,7 +31,9 @@
                     android:id="@+id/tvWelcomeUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Operador: usuario@salmon.cl"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/role_welcome_user"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -41,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Sesión activa y segura"
+                    android:text="@string/role_session_secure"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp" />
             </LinearLayout>

@@ -4,20 +4,20 @@
     <!-- Pantalla Login -->
     <string name="login_welcome_title">Bienvenido</string>
     <string name="login_welcome_subtitle">Monitoreo de Piscicultura</string>
-    <string name="login_form_title">Acceso de Operador</string>
+    <string name="login_form_title">Inicia sesión</string>
     <string name="login_form_subtitle">Ingresa con tu correo registrado para continuar</string>
     <string name="login_email_hint">Correo electrónico</string>
     <string name="login_password_hint">Contraseña</string>
     <string name="login_password_helper">Mínimo 8 caracteres, con letras y números</string>
-    <string name="login_btn_enter">Ingresar al Sistema</string>
+    <string name="login_btn_enter">Ingresar</string>
     <string name="login_btn_go_register">¿No tienes cuenta? Crear una cuenta</string>
-    <string name="login_footer_note">Sesión segura con Firebase. Una vez ingresado, el monitoreo funciona sin necesidad de Internet.</string>
+    <string name="login_footer_note">Tus datos están protegidos. Después de ingresar, el monitoreo funciona sin Internet.</string>
     <string name="login_error_generic">Correo o contraseña incorrectos. Revisa tus datos e intenta de nuevo.</string>
     <string name="login_error_network">Sin conexión a Internet. Revisa tu red Wi-Fi o datos móviles para ingresar.</string>
 
     <!-- Pantalla Registro -->
     <string name="register_title">Crear Cuenta</string>
-    <string name="register_subtitle">Registro de nuevo operador de piscicultura</string>
+    <string name="register_subtitle">Crea tu cuenta para empezar</string>
     <string name="register_email_hint">Correo electrónico</string>
     <string name="register_password_hint">Contraseña nueva</string>
     <string name="register_confirm_password_hint">Confirmar contraseña</string>
@@ -27,11 +27,13 @@
     <!-- Pantalla Selección de Rol -->
     <string name="role_select_title">¿Qué función cumple este celular?</string>
     <string name="role_select_subtitle">Elige cómo usarás este dispositivo en el estanque</string>
-    <string name="role_operator_label">Operador:</string>
+    <string name="role_welcome_user">Hola, usuario</string>
+    <string name="role_session_secure">Sesión activa y segura</string>
+    <string name="role_operator_label">Usuario:</string>
     <string name="role_logout_btn">Cerrar sesión</string>
 
     <string name="role_nodo_title">Estanque (sensor)</string>
-    <string name="role_nodo_desc">Simula el agua del estanque con sensores de temperatura y turbidez, más los actuadores de oxígeno y alimento.</string>
+    <string name="role_nodo_desc">Simula el agua del estanque con sensores de temperatura y turbidez, más los equipos de oxígeno y alimento.</string>
     <string name="role_nodo_btn">Usar como Estanque</string>
 
     <string name="role_estacion_title">Panel de control</string>
@@ -39,9 +41,9 @@
     <string name="role_estacion_btn">Usar como Panel de control</string>
 
     <string name="role_help_header">¿Cómo conectar los dos celulares?</string>
-    <string name="role_help_step1">1. Abre esta aplicación en dos celulares con Bluetooth activado.</string>
-    <string name="role_help_step2">2. En uno presiona "Estanque (sensor)" y en el otro "Panel de control".</string>
-    <string name="role_help_step3">3. En el panel, presiona "Conectar" eligiendo el otro celular. ¡Listo!</string>
+    <string name="role_help_step1">1. En AMBOS celulares, activa el Bluetooth y empareja uno con el otro desde Ajustes > Bluetooth (solo se hace una vez).</string>
+    <string name="role_help_step2">2. Abre la app en los dos celulares. En uno elige "Estanque (sensor)" y pulsa "Iniciar Estanque"; en el otro elige "Panel de control".</string>
+    <string name="role_help_step3">3. En el panel, pulsa "Seleccionar dispositivo emparejado", elige el celular del estanque y pulsa "Conectar". ¡Listo!</string>
 
     <!-- Permisos y Bluetooth -->
     <string name="permissions_title">Permisos de Bluetooth necesarios</string>
@@ -53,7 +55,7 @@
     <string name="permissions_btn_enable_bt">Activar Bluetooth</string>
 
     <!-- Pantalla Estanque (Nodo) -->
-    <string name="nodo_chip_header">ESTANQUE · sensor</string>
+    <string name="nodo_chip_header">ESTANQUE · sensor (nodo sensor)</string>
     <string name="nodo_connection_waiting">Esperando conexión...</string>
     <string name="nodo_connection_connected">Conectado con Panel</string>
     <string name="nodo_connection_stopped">Estanque detenido</string>
@@ -74,14 +76,14 @@
     <string name="nodo_feeder_postponed">POSPUESTO</string>
     <string name="nodo_feeder_postponed_help">En espera: el aireador está encendido</string>
     <string name="nodo_feeder_waiting">EN ESPERA</string>
-    <string name="nodo_btn_force_feed">Dar alimento ahora (prueba local)</string>
+    <string name="nodo_btn_force_feed">Dar alimento ahora</string>
     <string name="nodo_btn_toggle_log">Ver detalles técnicos</string>
     <string name="nodo_btn_hide_log">Ocultar detalles técnicos</string>
 
     <!-- Pantalla Panel de control (Estación) -->
-    <string name="estacion_chip_header">PANEL DE CONTROL</string>
+    <string name="estacion_chip_header">PANEL DE CONTROL (estación)</string>
     <string name="estacion_device_prompt">¿Cuál es el celular del estanque?</string>
-    <string name="estacion_device_select_hint">Elige el celular del estanque...</string>
+    <string name="estacion_device_select_hint">Seleccionar dispositivo emparejado</string>
     <string name="estacion_btn_connect">Conectar</string>
     <string name="estacion_btn_disconnect">Desconectar</string>
 

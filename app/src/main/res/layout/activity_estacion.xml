@@ -140,7 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:background="@drawable/bg_banner_warning">
+            android:background="@drawable/bg_banner_info">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -154,8 +154,8 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:contentDescription="Estado del estanque"
-                    android:src="@drawable/ic_warning"
-                    app:tint="@color/status_warning" />
+                    android:src="@drawable/ic_info"
+                    app:tint="?attr/colorPrimary" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -169,7 +169,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/estacion_banner_waiting_title"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
