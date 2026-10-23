@@ -5,12 +5,15 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.R
 import com.example.databinding.ActivityNodoBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 
 /**
@@ -22,11 +25,17 @@ import kotlinx.coroutines.launch
  */
 class NodoActivity : AppCompatActivity() {
 
+    companion object {
+        private const val KEY_EXIT_DIALOG_SHOWING = "key_nodo_exit_dialog_showing"
+    }
+
     private lateinit var binding: ActivityNodoBinding
     private val viewModel: NodoViewModel by viewModels()
 
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var isLogExpanded: Boolean = false
+    private var isExitDialogShowing: Boolean = false
+    private var exitConfirmDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +45,65 @@ class NodoActivity : AppCompatActivity() {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
         bluetoothAdapter = bluetoothManager?.adapter ?: BluetoothAdapter.getDefaultAdapter()
 
+        setupBackNavigation()
         setupListeners()
         observeViewModel()
+
+        if (savedInstanceState?.getBoolean(KEY_EXIT_DIALOG_SHOWING, false) == true) {
+            val state = viewModel.uiState.value
+            if (state.isServerListening || state.isEstacionConectada) {
+                showExitConfirmationDialog()
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_EXIT_DIALOG_SHOWING, isExitDialogShowing)
+    }
+
+    private fun setupBackNavigation() {
+        val backCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                handleExitRequest()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, backCallback)
+
+        binding.btnVolverRoles.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun handleExitRequest() {
+        val state = viewModel.uiState.value
+        val isActive = state.isServerListening || state.isEstacionConectada
+        if (isActive) {
+            showExitConfirmationDialog()
+        } else {
+            finish()
+        }
+    }
+
+    private fun showExitConfirmationDialog() {
+        exitConfirmDialog?.dismiss()
+        isExitDialogShowing = true
+        exitConfirmDialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.dialog_exit_title)
+            .setMessage(R.string.dialog_exit_message)
+            .setPositiveButton(R.string.dialog_exit_confirm) { _, _ ->
+                isExitDialogShowing = false
+                viewModel.detenerServidor()
+                finish()
+            }
+            .setNegativeButton(R.string.dialog_exit_stay) { dialog, _ ->
+                isExitDialogShowing = false
+                dialog.dismiss()
+            }
+            .setOnCancelListener {
+                isExitDialogShowing = false
+            }
+            .show()
     }
 
     private fun setupListeners() {
@@ -175,6 +241,8 @@ class NodoActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        exitConfirmDialog?.dismiss()
+        exitConfirmDialog = null
         if (isFinishing) {
             viewModel.detenerServidor()
         }

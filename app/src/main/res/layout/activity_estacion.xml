@@ -14,6 +14,22 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Botón para volver a la selección de roles -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVolverRoles"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:layout_marginStart="-8dp"
+            android:layout_marginBottom="4dp"
+            android:contentDescription="@string/volver_roles_content_desc"
+            android:text="@string/btn_volver_roles"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
         <!-- Encabezado con ROL VISIBLE en un Chip destacado -->
         <LinearLayout
             android:layout_width="match_parent"

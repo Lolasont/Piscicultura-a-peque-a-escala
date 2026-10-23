@@ -110,4 +110,12 @@
 
     <string name="estacion_waiting_telemetry">Esperando datos del estanque...</string>
     <string name="estacion_data_outdated_warning">⚠ Datos desactualizados, revisando conexión...</string>
+
+    <!-- Botón Volver a Roles y Diálogo de Confirmación -->
+    <string name="btn_volver_roles">← Volver</string>
+    <string name="volver_roles_content_desc">Volver a la selección de rol</string>
+    <string name="dialog_exit_title">¿Quieres salir?</string>
+    <string name="dialog_exit_message">Si vuelves ahora, se cerrará la conexión con el otro celular.</string>
+    <string name="dialog_exit_confirm">Volver</string>
+    <string name="dialog_exit_stay">Quedarme</string>
 </resources>

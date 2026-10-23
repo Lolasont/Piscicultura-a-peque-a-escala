@@ -6,7 +6,9 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -30,10 +32,16 @@ import kotlinx.coroutines.launch
  */
 class EstacionActivity : AppCompatActivity() {
 
+    companion object {
+        private const val KEY_EXIT_DIALOG_SHOWING = "key_estacion_exit_dialog_showing"
+    }
+
     private lateinit var binding: ActivityEstacionBinding
     private val viewModel: EstacionViewModel by viewModels()
 
     private var bluetoothAdapter: BluetoothAdapter? = null
+    private var isExitDialogShowing: Boolean = false
+    private var exitConfirmDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +51,65 @@ class EstacionActivity : AppCompatActivity() {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
         bluetoothAdapter = bluetoothManager?.adapter ?: BluetoothAdapter.getDefaultAdapter()
 
+        setupBackNavigation()
         setupListeners()
         observeViewModel()
+
+        if (savedInstanceState?.getBoolean(KEY_EXIT_DIALOG_SHOWING, false) == true) {
+            val state = viewModel.uiState.value
+            if (state.isConnected || state.isConnecting) {
+                showExitConfirmationDialog()
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_EXIT_DIALOG_SHOWING, isExitDialogShowing)
+    }
+
+    private fun setupBackNavigation() {
+        val backCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                handleExitRequest()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, backCallback)
+
+        binding.btnVolverRoles.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun handleExitRequest() {
+        val state = viewModel.uiState.value
+        val isActive = state.isConnected || state.isConnecting
+        if (isActive) {
+            showExitConfirmationDialog()
+        } else {
+            finish()
+        }
+    }
+
+    private fun showExitConfirmationDialog() {
+        exitConfirmDialog?.dismiss()
+        isExitDialogShowing = true
+        exitConfirmDialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.dialog_exit_title)
+            .setMessage(R.string.dialog_exit_message)
+            .setPositiveButton(R.string.dialog_exit_confirm) { _, _ ->
+                isExitDialogShowing = false
+                viewModel.desconectar()
+                finish()
+            }
+            .setNegativeButton(R.string.dialog_exit_stay) { dialog, _ ->
+                isExitDialogShowing = false
+                dialog.dismiss()
+            }
+            .setOnCancelListener {
+                isExitDialogShowing = false
+            }
+            .show()
     }
 
     private fun setupListeners() {
@@ -336,6 +401,15 @@ class EstacionActivity : AppCompatActivity() {
             binding.btnAireadorOn.alpha = 0.5f
             binding.btnAireadorOff.isEnabled = false
             binding.btnAireadorOff.alpha = 0.5f
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        exitConfirmDialog?.dismiss()
+        exitConfirmDialog = null
+        if (isFinishing) {
+            viewModel.desconectar()
         }
     }
 }
