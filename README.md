@@ -28,7 +28,7 @@ Para validar la arquitectura OT/IoT sin depender de componentes físicos durante
    * Actúa como cliente Bluetooth RFCOMM que se conecta al estanque.
    * Muestra un panel con 4 tarjetas con los valores en vivo de temperatura, turbidez, estado de equipos y cuenta regresiva sincronizada para la próxima comida.
    * Permite enviar órdenes directas hacia el estanque: **Dar alimento ahora** y **Cambiar modo del aireador (Automático, Encender, Apagar)**.
-   * **Comportamiento sin conexión:** Si no hay conexión o no se han recibido datos, muestra valores neutros (`--.- °C`, `--.- %`, `SIN CONEXIÓN`) en color gris atenuado, el botón **Desconectar** aparece deshabilitado y sin borde rojo fuerte, y los controles remotos se muestran atenuados.
+   * **Comportamiento sin conexión:** Si no hay conexión o no se han recibido datos, muestra valores neutros (`--.- °C`, `--.- %`, `SIN CONEXIÓN`) en color gris atenuado, el botón **Desconectar** aparece deshabilitado y sin borde rojo fuerte, y los controles remotos se atenúan (`alpha = 0.5f`).
 
 ---
 
@@ -73,7 +73,7 @@ La interfaz fue diseñada bajo principios de diseño centrado en el usuario (UCD
   * **Rojo:** Alerta que requiere atención (temperatura fuera de rango, agua turbia, aireador encendido o dispensando alimento).
   * **Azul Informativo:** Banners de espera y estado de sincronización (`bg_banner_info`), reservando los colores de advertencia exclusivamente para situaciones anómalas.
 * **Representación Honesta del Estado Desconectado:**
-  Si el panel de control no está conectado al estanque o aún no recibe telemetría, las tarjetas muestran valores neutros (`--.- °C`, `--.- %`, `SIN CONEXIÓN`) en color gris tenue. No se muestran falsos estados verdes, ni modos automáticos, ni cuentas regresivas simuladas. El botón **Desconectar** se visualiza deshabilitado y atenuado, con borde gris neutro, y los botones de control remoto se muestran atenuados y deshabilitados hasta restablecer el enlace.
+  Si el panel de control no está conectado al estanque o aún no recibe telemetría, las tarjetas muestran valores neutros (`--.- °C`, `--.- %`, `SIN CONEXIÓN`) en color gris tenue. No se muestran falsos estados verdes, ni modos automáticos, ni cuentas regresivas simuladas. El botón **Desconectar** se visualiza deshabilitado (`alpha = 0.4f`, borde gris neutro) y los botones de control remoto se atenúan (`alpha = 0.5f`) y deshabilitan hasta restablecer el enlace.
 * **Tema Claro y Oscuro Automático:** La aplicación se ajusta automáticamente al modo que tenga configurado el celular (claro u oscuro), sin que el usuario deba cambiar nada dentro de la app.
 
 ---
@@ -198,5 +198,5 @@ A continuación se detallan las 12 pruebas estructuradas para validar todas las 
 | **8** | **Conexión Bluetooth en vivo entre ambos celulares:** En el Celular 1 (Estanque) pulsar "Iniciar Estanque". En el Celular 2 (Panel) presionar "Seleccionar dispositivo emparejado", elegir Celular 1 y presionar "Conectar". | El Celular 1 pasa a *"Conectado con Panel"*. El Celular 2 pasa a *"Conectado"* (punto verde) y comienza a recibir telemetría cada 2 segundos. |
 | **9** | **Comando de alimentación a distancia:** En el Panel con aireador apagado, presionar "Dar alimento ahora". | El Panel envía `{"type":"CMD","cmd":"FEED"}`. El Estanque activa el alimentador (3 s), envía telemetría de activación y el Panel muestra *"Dispensando alimento..."*. |
 | **10** | **Interbloqueo y modo manual del aireador:** En el Panel, pulsar "Encender" del aireador. Luego presionar "Dar alimento ahora". | El aireador pasa a ENCENDIDO (rojo). Al presionar el alimento, el Estanque pospone la acción y el Panel muestra *"En espera (aireador encendido)"* y estado POSPUESTO. |
-| **11** | **Desconexión y estado neutral:** Estando conectados y transmitiendo datos, presionar "Desconectar" o apagar el Bluetooth en el Estanque. | El Panel no se bloquea ni crashea; detecta la desconexión, emite un aviso, muestra las tarjetas en estado neutro gris (`--.- °C`, `--.- %`, `SIN CONEXIÓN`), el botón "Desconectar" pasa a deshabilitado atenuado y los controles remotos se muestran atenuados. |
+| **11** | **Desconexión y estado neutral:** Estando conectados y transmitiendo datos, presionar "Desconectar" o apagar el Bluetooth en el Estanque. | El Panel no se bloquea ni crashea; detecta la desconexión, emite un aviso, muestra las tarjetas en estado neutro gris (`--.- °C`, `--.- %`, `SIN CONEXIÓN`), el botón "Desconectar" pasa a deshabilitado atenuado y los controles remotos se atenúan a `alpha = 0.5f`. |
 | **12** | **Rotación de pantalla en ambos celulares:** Con la conexión Bluetooth activa y transmitiendo, rotar ambos celulares a modo horizontal y vertical. | Ningún celular se desconecta; los sliders del Estanque mantienen sus valores y el dashboard del Panel sigue actualizándose sin interrupción. |
